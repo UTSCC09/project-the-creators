@@ -30,7 +30,7 @@ This application allows users to create their own projects in their own gallery 
 
 **Frontend**: React.js Bootstrap two.js
 
-**Backend**: express.js
+**Backend**: express.js, asp.net or spring boot
 
 **Database**: GraphQL
 
