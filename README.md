@@ -5,10 +5,10 @@
 | ------ | ------ | ------ |
 | Jadin Luong | 1001689238 | jadin.luong@mail.utoronto.ca |
 | Mengqi Zhao | 1005355269 | hart.zhao@mail.utoronto.ca |
-| Johnson Zhong | | johnson.zhong@mail.utoronto.ca |
+| Johnson Zhong | 1004051107 | johnson.zhong@mail.utoronto.ca |
 
 ### A description of the web application
-This application allows users to create their own projects in their own gallery which will be non-collaborative. If a user wants to create a collaborative project, then they must create it in their shared gallery where they can invite users to collaborate on a single canvas and each user will be able to simultaneously modify one single canvas. This will act as a tool to support several activities such as creating collaborative art, brainstorming with teammates, teaching, etc. The web application will include a chat system on the side to allow users to communicate with one another through text so they are not only restricted to collaborating on a canvas. This application will also offer users a variety of utensils to draw with.
+This application allows users to create their own projects in their own gallery which will be non-collaborative. If a user wants to create a collaborative project, then they must create it in their shared gallery where they can invite users with an invitation link or give specific users access permissions to collaborate on a single canvas and each user will be able to simultaneously modify one single canvas. This will act as a tool to support several activities such as creating collaborative art, brainstorming with teammates, teaching, etc. The web application will include a chat system on the side to allow users to communicate with one another through text so they are not only restricted to collaborating on a canvas. This application will also offer users a variety of utensils to draw with.
 
 ### A description of the key features that will be completed by the Beta version
 **Feature 1**: User profiles - Non-authenticated users can sign up to the app, authenticated users can sign in/out the app. Authenticated users can view their profile.
@@ -24,9 +24,11 @@ This application allows users to create their own projects in their own gallery 
 
 **Feature 2**: Utensil Selection - Users will be able to choose any utensil of their liking. Example: Can change strokes to paint brush strokes or pencil strokes.
 
+**Feature 3**: Gallery Restricted Access - Users will be able to restrict access to some of their projects in their shared gallery. Users will be able to allow specific authenticated users to access their galleries. This can be done through a invitation link to the project or by manually authenticating a specific user to access the project.
+
 ### A description of the technology stack that you will use to build and deploy it
 
-**Frontend**: React.js Bootstrap
+**Frontend**: React.js Bootstrap two.js
 
 **Backend**: express.js
 
@@ -36,8 +38,8 @@ This application allows users to create their own projects in their own gallery 
 
 ### A description of the top 5 technical challenges
 1. The ability to make the application collaborative, connecting users into one collaborative project. Sockets may be used. (Potential library socket.io)
-3. Implementing different paint strokes, brush, pencil, spray paint, etc.
-5. We never used GraphQL before, so there will be technical challenges to get familiarized and mastered with this database.
-6. Even though our team used React.js before, it has been a while since we last touched it. Therefore, we will need to conquer any potential frontend technical difficulties.
-7. Properly connecting users and allowing them to send messages in real-time.
+2. Implementing different paint strokes, brush, pencil, spray paint, etc.
+3. We never used GraphQL before, so there will be technical challenges to get familiarized and mastered with this database.
+4. Even though our team used React.js before, it has been a while since we last touched it. Therefore, we will need to conquer any potential frontend technical difficulties.
+5. Properly connecting users and allowing them to send messages in real-time.
 
