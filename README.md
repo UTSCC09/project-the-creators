@@ -27,8 +27,11 @@ This application allows users to create their own projects in their own gallery 
 ### A description of the technology stack that you will use to build and deploy it
 
 **Frontend**: React.js Bootstrap
+
 **Backend**: express.js
+
 **Database**: GraphQL
+
 **Package Manager**: npm - Node Package Manager
 
 ### A description of the top 5 technical challenges
