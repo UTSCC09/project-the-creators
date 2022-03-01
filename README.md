@@ -1,5 +1,4 @@
-# Project Title
-Envisionit
+# Envisionit
 
 ### Team Members
 | Name | Student Number | Student E-mail |
