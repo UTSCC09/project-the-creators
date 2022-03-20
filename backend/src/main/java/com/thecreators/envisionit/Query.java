@@ -4,9 +4,7 @@ import java.util.List;
 import com.thecreators.envisionit.IUserRepository;
 import com.thecreators.envisionit.UserDAO;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import org.springframework.stereotype.Component;
 
-@Component
 public class Query implements GraphQLQueryResolver {
     private UserDAO userDao;
 
