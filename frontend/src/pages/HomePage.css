@@ -1,0 +1,7 @@
+.home-pic {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  aspect-ratio: 1920/1080;
+}
