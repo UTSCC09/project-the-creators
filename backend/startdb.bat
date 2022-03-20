@@ -1,0 +1,2 @@
+start cmd /k "C:\Program Files\MongoDB\Server\5.0\bin\mongod.exe" --dbpath E:\Documents\School\CSCC09\project-the-creators\db\data
+start cmd /k "C:\Program Files\MongoDB\Server\5.0\bin\mongo.exe"
