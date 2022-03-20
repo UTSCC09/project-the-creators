@@ -3,6 +3,7 @@ package com.thecreators.envisionit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -46,7 +47,7 @@ public class Canvas {
 		return collaborators;
 	}
 
-	public void setCollaborators(String collaborators) {
+	public void setCollaborators(List<User> collaborators) {
 		this.collaborators = collaborators;
 	}
 

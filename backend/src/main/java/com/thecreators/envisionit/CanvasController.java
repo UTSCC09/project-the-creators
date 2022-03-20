@@ -22,20 +22,20 @@ public class CanvasController {
 	}
 
     @GetMapping("/api/canvas")
-    public List<canvas> getAllCanvases() {
+    public List<Canvas> getAllCanvases() {
         //LOG.info("Getting all canvas.");
         return canvasRepository.findAll();
     }
 
     @GetMapping("/api/canvas/{canvasId}")
-    public canvas getCanvas(@PathVariable String canvasId) {
+    public Canvas getCanvas(@PathVariable String canvasId) {
         //LOG.info("Getting canvas with ID: {}.", canvasId);
         return canvasRepository.findById(canvasId)
         .orElseThrow(() -> new UserNotFoundException(canvasId));
     }
     
     @PostMapping("/api/canvas")
-    public canvas addNewCanvas(@RequestBody Canvas canvas) {
+    public Canvas addNewCanvas(@RequestBody Canvas canvas) {
         //LOG.info("Saving canvas.");
         return canvasRepository.save(canvas);
     }
