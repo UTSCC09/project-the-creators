@@ -15,6 +15,7 @@ public class Gallery {
 	private String title;
     private String creator;
 	private Date creationDate = new Date();
+	private boolean isPublic;
 
 	public String getGalleryId() {
 		return galleryId;
@@ -38,6 +39,14 @@ public class Gallery {
 
 	public void setCreator(String creator) {
 		this.creator = creator;
+	}
+
+	public boolean getIsPublic() {
+		return isPublic;
+	}
+
+	public void setIsPublic(boolean isPublic) {
+		this.isPublic = isPublic;
 	}
 
 	public Date getCreationDate() {

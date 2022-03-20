@@ -16,9 +16,11 @@ public class GalleryController {
 	//private final Logger LOG = LoggerFactory.getLogger(getClass());
 
 	private final IGalleryRepository galleryRepository;
+    private final ICanvasRepository canvasRepository;
 
-	public GalleryController(IGalleryRepository galleryRepository) {
+	public GalleryController(IGalleryRepository galleryRepository, ICanvasRepository canvasRepository) {
 		this.galleryRepository = galleryRepository;
+        this.canvasRepository = canvasRepository;
 	}
 
     @GetMapping("/api/gallery")
@@ -33,6 +35,7 @@ public class GalleryController {
         return galleryRepository.findById(galleryId)
         .orElseThrow(() -> new UserNotFoundException(galleryId));
     }
+
     
     @PostMapping("/api/gallery")
     public Gallery addNewGallery(@RequestBody Gallery gallery) {

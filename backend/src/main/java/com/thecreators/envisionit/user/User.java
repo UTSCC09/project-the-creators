@@ -13,6 +13,8 @@ public class User {
 	@Id
 	private String userId;
 	private String username;
+	private String email;
+	private String password;
 	private Date creationDate = new Date();
 	private Map<String, String> userSettings = new HashMap<>();
 
@@ -32,6 +34,22 @@ public class User {
 		this.username = username;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -46,5 +64,9 @@ public class User {
 
 	public void setUserSettings(Map<String, String> userSettings) {
 		this.userSettings = userSettings;
+	}
+
+	public String toString() {
+		return this.getUserId();
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.thecreators.envisionit.User; 
 import com.thecreators.envisionit.IUserRepository; 
+import com.thecreators.envisionit.UserNotFoundException; 
 
 @RestController
 public class UserController {
