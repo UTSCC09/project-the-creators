@@ -130,7 +130,7 @@ const Sign = () => {
                     size="lg"
                     style={{ width: "100%" }}
                     onClick={() => {
-                      window.location.href = `/signinup`;
+                      window.location.href = `/signup`;
                     }}
                   >
                     Sign up

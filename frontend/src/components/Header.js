@@ -8,7 +8,7 @@ const Header = () => {
         <Container>
           <Navbar.Brand href="/">Envisionit</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/signinup">Sign in/up</Nav.Link>
+            <Nav.Link href="/signin">Sign in/up</Nav.Link>
             <Nav.Link href="/galleries">Galleries</Nav.Link>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
