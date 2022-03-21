@@ -3,17 +3,19 @@ import Nav from "react-bootstrap/Nav";
 import { Tab, Tabs } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import Local from "./Local";
+import Shared from "./Shared";
 
 const galleries = () => {
   return (
     <>
       <Header />
       <Container className="pt-5 pb-3">
-        <Tabs defaultActiveKey="local" id="accountPG" className="">
-          <Tab eventKey="local" title="Local">
-            <Local />
+        <Tabs defaultActiveKey="shared" id="accountPG" className="">
+          <Tab eventKey="shared" title="Shared">
+            <Shared />
           </Tab>
-          <Tab eventKey="shared" title="Shared"></Tab>
+          <Tab eventKey="local" title="Local"></Tab>
+            <Local />
         </Tabs>
       </Container>
     </>
