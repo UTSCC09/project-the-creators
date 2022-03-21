@@ -1,0 +1,29 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.editbutton {
+  display: flex;
+  flex-direction: row;
+}
+
+.thetwobuttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.containercenter {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  background-color: white;
+}
+
+.editaccountformwidth {
+  width: 30rem;
+  border: 3px black solid;
+  border-radius: 10px;
+  margin-top: 3%;
+  padding: 12px;
+}

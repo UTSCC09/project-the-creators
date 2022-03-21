@@ -13,7 +13,7 @@ const Header = () => {
           </Nav>
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-              Signed in as: <a href="#login">Mark Otto</a>
+              Signed in as: <a href="/markotto">Mark Otto</a>
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>
