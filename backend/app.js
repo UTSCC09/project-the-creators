@@ -45,16 +45,17 @@ let User = function (req) {
     this.creationDate = new Date();
 }
 
-let Image = function (req) {
+let Canvas = function (req) {
     const date = new Date();
     this.title = req.body.title; 
-    this.author = req.session.username;
-    this.path = req.file.path;
-    this.mimetype = req.file.mimetype;
+    this.creator = req.username;
+    //this.path = req.file.path;
+    this.isShared = req.body.isShared;
+    this.collaborators = [req.username];
     this.date = date.toUTCString();
 };
 
-let Comment = function (req) {
+let Comment = function (body) {
     const date = new Date();
     this.imageId = req.body.imageId; 
     this.author = req.body.author;
@@ -67,12 +68,8 @@ const isAuthenticated = function(req, res, next) {
     next();
 };
 
-function isLast(page, total) {
-    return (total < 10 || total - page <= page || (total + page) % 10 == 0);
-}
-
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signup/
-app.post('/signup/', function (req, res, next) {
+app.post('/auth/signup/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     const username = req.body.username;
     const password = req.body.password;
@@ -85,7 +82,7 @@ app.post('/signup/', function (req, res, next) {
             const userDoc = new User(req.body);
             dbConnect.collection('users').insertOne(userDoc, function (err, result) {
                 if (err) return res.status(500).end(err);
-                console.log(`Added a new match with id ${result.insertedId}`);
+                console.log(`Added a new user with id ${result.insertedId}`);
                 // initialize cookie
                 res.setHeader('Set-Cookie', cookie.serialize('username', username, {
                         path : '/', 
@@ -107,11 +104,11 @@ app.post('/signup/', function (req, res, next) {
 
 
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signin/
-app.post('/signin/', function (req, res, next) {
+app.post('/auth/signin/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     req.session.username = req.body.username;
-    var username = req.session.username;
-    var password = req.body.password;
+    const username = req.session.username;
+    const password = req.body.password;
     // retrieve user from the database
     dbConnect.collection('users').findOne({username: username}, function (err, user) {
         console.log(user)
@@ -131,48 +128,56 @@ app.post('/signin/', function (req, res, next) {
 });
 
 //// curl -b cookie.txt -c cookie.txt localhost:3000/signout/
-//app.get('/signout/', function (req, res, next) {
-//    res.setHeader('Set-Cookie', cookie.serialize('username', '', {
-//          path : '/', 
-//          maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
-//    }));
-//    // delete session
-//    req.session.destroy(function(err) {
-//        if (err) return res.status(500).end(err);
-//        res.json(null);
-//    });
-//});
+app.get('/auth/signout/', function (req, res, next) {
+    res.setHeader('Set-Cookie', cookie.serialize('username', '', {
+          path : '/', 
+          maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
+    }));
+    // delete session
+    req.session.destroy(function(err) {
+        if (err) return res.status(500).end(err);
+        res.json(null);
+    });
+});
 
-///// Create
-//app.post('/api/images', isAuthenticated, upload.single('image'), function (req, res, next) {
-//    const image = new Image(req);
-//    images.insert(image, function (err, item) {
-//        if (err) return res.status(500).end(err);
-//        return res.json(item);
-//    });
-//});
+/// Create
+app.post('/api/canvas', isAuthenticated, function (req, res, next) {
+    const dbConnect = dbo.getDb();
+    const canvasTitle = req.body.title;
+    dbConnect.collection('canvases').findOne({username: req.username, title: canvasTitle}, function (err, canvas) {
+        if (err) return res.status(500).end(err);
+        if (canvas) return res.status(409).end("canvas with title " + canvasTitle + " already exists");
+        const canvasDoc = new Canvas(req);
+        dbConnect.collection('canvases').insertOne(canvasDoc, function (err, result) {
+            if (err) return res.status(500).end(err);
+            console.log(`Added a new canvas with id ${result.insertedId}`);
+            return res.json(result);
+        });
+    });
+});
 
-//app.post('/api/comments', isAuthenticated, function (req, res, next) {
-//    const comment = new Comment(req);
-//    comments.insert(comment, function (err, item) {
-//        if (err) return res.status(500).end(err);
-//        return res.json(item);
-//    });
-//});
+/// Read
+app.get('/api/canvas/:id/:title', isAuthenticated, function (req, res, next) {
+    const dbConnect = dbo.getDb();
+    dbConnect.collection('canvases').findOne({creator: req.params.id, title: req.params.title}, function (err, canvas) {
+        if (err) return res.status(500).end(err);
+        res.json(canvas);
+    });
+});
 
-///// Read
-//app.get('/api/images/:id', isAuthenticated, function (req, res, next) {
-//    // Return empty object if there are no images
-//    images.count({author: req.params.id}, function(err, count) {
-//        if (err) return res.status(500).end(err);
-//        if (count == 0)
-//            return res.json(null);
-//        images.find({author: req.params.id}).sort({createdAt:-1}).exec(function(err, items) { 
-//            if (err) return res.status(500).end(err);
-//            res.json(items.reverse());
-//        });
-//    });
-//});
+// get shared/private galleries
+app.get('/api/gallery/:id/:isShared', isAuthenticated, function (req, res, next) {
+    const dbConnect = dbo.getDb();
+    // Prevent non-creators from seeing other's private galleries
+    const reqUser = req.params.id;
+    const isShared = req.params.isShared;
+    if (!(isShared) && req.username != reqUser)
+        return res.status(401).end("cannot view user " + reqUser + "'s private gallery");
+    dbConnect.collection('canvases').find({creator: reqUser, isShared: JSON.parse(isShared.toLowerCase()), collaborators: req.username}).toArray(function (err, canvases) {
+        if (err) return res.status(500).end(err);
+        res.json(canvases);
+    });
+});
 
 //app.get('/api/images/:id/image', isAuthenticated, function (req, res, next) {
 //    images.findOne({'_id': req.params.id}, function(err, image) {

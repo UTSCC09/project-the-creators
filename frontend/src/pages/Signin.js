@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { authUrl, apiUrl } from "../lib/constants.js"
 import axios from "axios";
 
 const Sign = () => {
@@ -15,7 +16,7 @@ const Sign = () => {
   const checkLogin = async () => {
     setHasError(false);
     await axios
-      .post("/api/auth/login", {
+      .post(authUrl + "/signin", {
         username: details.name,
         password: details.password,
       })
