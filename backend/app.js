@@ -7,8 +7,10 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookie = require('cookie');
 const dbo = require('./db/conn');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(session({
     secret: 'thisisasecret',
     resave: false,
@@ -32,10 +34,14 @@ app.use(function (req, res, next){
 const multer = require('multer');
 const upload = multer({dest: path.join(__dirname, 'uploads/')});
 
-let User = function (username, hashedPassword, email) {
-    this.username = username;
-    this.email = email;
-    this.hashedPassword = hashedPassword;
+let User = function (req) {
+    this.username = req.username;
+    this.email = req.email;
+    this.password = req.password;
+    this.firstName = req.firstName;
+    this.lastName = req.lastName;
+    this.city = req.city;
+    this.phone = req.phone;
     this.creationDate = new Date();
 }
 
@@ -75,7 +81,8 @@ app.post('/signup/', function (req, res, next) {
         dbConnect.collection('users').findOne({username: username}, function (err, user) {
             if (err) return res.status(500).end(err, user);
             if (user) return res.status(409).end("username " + username + " already exists");
-            const userDoc = new User(username, hash, req.body.email);
+            req.body.password = hash;
+            const userDoc = new User(req.body);
             dbConnect.collection('users').insertOne(userDoc, function (err, result) {
                 if (err) return res.status(500).end(err);
                 console.log(`Added a new match with id ${result.insertedId}`);
@@ -110,7 +117,7 @@ app.post('/signin/', function (req, res, next) {
         console.log(user)
         if (err) return res.status(500).end(err);
         if (!user) return res.status(401).end("The username or password is incorrect.");
-        bcrypt.compare(password, user.hashedPassword, function(err, result) {
+        bcrypt.compare(password, user.password, function(err, result) {
             if (err) return res.status(500).end(err);
             if (!result) return res.status(401).end("The username or password is incorrect.");
             // initialize cookie

@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Header from "../components/Header";
+import { baseUrl } from "../lib/constants"
 
 const UserProfile = () => {
   const [status, setStatus] = useState({ isLoggedIn: false, user: null });
