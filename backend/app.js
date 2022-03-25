@@ -68,6 +68,10 @@ const isAuthenticated = function(req, res, next) {
     next();
 };
 
+const isSameUser = function(req, res, next) {
+    if (req.username == req.body.username) return res.status(401).end("access denied")
+}
+
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signup/
 app.post('/auth/signup/', function (req, res, next) {
     const dbConnect = dbo.getDb();
@@ -223,6 +227,11 @@ app.get('/api/gallery/:id/:isShared', isAuthenticated, function (req, res, next)
 //        });
 //    });
 //});
+
+///// Update
+app.put('/api/users/:id', isAuthenticated, function (req, res, next) {
+
+})
 
 ///// Delete
 //app.delete('/api/images/:id', isAuthenticated, function (req, res, next) {
