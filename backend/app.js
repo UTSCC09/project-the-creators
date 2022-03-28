@@ -6,8 +6,12 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookie = require('cookie');
-const dbo = require('./db/conn');
 const cors = require('cors');
+// TODO: Credit to https://graphql.org/graphql-js/running-an-express-graphql-server/
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
+
+const dbo = require('./db/conn');
 
 const app = express();
 app.use(cors());
@@ -55,18 +59,19 @@ let Canvas = function (req) {
     this.date = date.toUTCString();
 };
 
-let Comment = function (body) {
-    const date = new Date();
-    this.imageId = req.body.imageId; 
-    this.author = req.body.author;
-    this.content = req.body.content;
-    this.date = date.toUTCString();
-};
 
 const isAuthenticated = function(req, res, next) {
     if (!req.username) return res.status(401).end("access denied");
     next();
 };
+
+const isSameUser = function(req, res, next) {
+    // TODO: deal with cases where username isnt in req
+    console.log("req user", req.username);
+    console.log("req params user", req.params.username);
+    if (req.username !== req.params.username) return res.status(401).end("access denied");
+    next();
+}
 
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signup/
 app.post('/auth/signup/', function (req, res, next) {
@@ -102,8 +107,6 @@ app.post('/auth/signup/', function (req, res, next) {
     });
 });
 
-
-// curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signin/
 app.post('/auth/signin/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     req.session.username = req.body.username;
@@ -127,7 +130,6 @@ app.post('/auth/signin/', function (req, res, next) {
     });
 });
 
-//// curl -b cookie.txt -c cookie.txt localhost:3000/signout/
 app.get('/auth/signout/', function (req, res, next) {
     res.setHeader('Set-Cookie', cookie.serialize('username', '', {
           path : '/', 
@@ -157,6 +159,22 @@ app.post('/api/canvas', isAuthenticated, function (req, res, next) {
 });
 
 /// Read
+app.get('/api/users', isAuthenticated, function(req, res, next) {
+    const dbConnect = dbo.getDb();
+    dbConnect.collection('users').find({}).toArray(function (err, users) {
+        if (err) return res.status(500).end(err);
+        res.json(users);
+    });
+});
+
+app.get('/api/users/:username', isAuthenticated, isSameUser, function(req, res, next) {
+    const dbConnect = dbo.getDb();
+    dbConnect.collection('users').findOne({username: req.params.username}, function (err, user) {
+        if (err) return res.status(500).end(err);
+        res.json(user);
+    });
+});
+
 app.get('/api/canvas/:id/:title', isAuthenticated, function (req, res, next) {
     const dbConnect = dbo.getDb();
     dbConnect.collection('canvases').findOne({creator: req.params.id, title: req.params.title}, function (err, canvas) {
@@ -179,82 +197,51 @@ app.get('/api/gallery/:id/:isShared', isAuthenticated, function (req, res, next)
     });
 });
 
-//app.get('/api/images/:id/image', isAuthenticated, function (req, res, next) {
-//    images.findOne({'_id': req.params.id}, function(err, image) {
-//        if (err) return res.status(500).end(err);
-//        if (!image) return res.status(400).end("Image " + req.params.id + " does not exist!");
-//        res.setHeader('Content-Type', image.mimetype);
-//        res.sendFile(image.path);
-//    });
-//});
+// Construct a schema, using GraphQL schema language
+var schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
 
-//app.get('/api/users/', isAuthenticated, function (req, res, next) {
-//    users.count({}, function(err, count) {
-//        if (err) return res.status(500).end(err);
-//        let page = parseInt(req.query.page) * 20;
-//        let isLastPage = isLast(page, count);
-//        users.find({}).skip(page).limit(10).exec(function(err, items) {
-//            if (err) return res.status(500).end(err);
-//            if (!items) return res.status(404).end("Comments under image # " + req.params.id + " do not exist.");
-//            // Remove the unneeded information
-//            const users = items.map(a => a._id);
-//            const result = {
-//                'users': users,
-//                'isLast': isLastPage
-//            };
-//            return res.json(result);
-//        });
-//    });
-//});
+var root = {
+    hello: () => {
+      return 'Hello world!';
+    },
+  };
 
-//app.get('/api/comments/:id', isAuthenticated, function (req, res, next) {
-//    comments.count({'imageId': req.params.id}, function(err, count) {
-//        if (err) return res.status(500).end(err);
-//        let page = parseInt(req.query.page) * 10;
-//        let isLastPage = isLast(page, count);
-//        comments.find({'imageId': req.params.id}).sort({createdAt: -1}).skip(page).limit(10).exec(function(err, items) {
-//            if (err) return res.status(500).end(err);
-//            if (!items) return res.status(404).end("Comments under image # " + req.params.id + " do not exist.");
-//            const result = {
-//                'comments': items,
-//                'isLast': isLastPage
-//            };
-//            return res.json(result);
-//        });
-//    });
-//});
+  
+  app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  }));
 
-///// Delete
-//app.delete('/api/images/:id', isAuthenticated, function (req, res, next) {
-//    images.findOne({_id: req.params.id}, function(err, image) {
-//        if (err) return res.status(500).end(err);
-//        if (!image) return res.status(404).end("Image with id # " + req.params.id + " does not exist.");
-        
-//        images.remove({_id: image._id}, {multi: false}, function(err) {
-//            if (err) return res.status(500).end(err);
-//            // Delete all of the comments associated with the image as well
-//            comments.remove({'imageId': image._id}, {multi: true}, function(err) {
-//                if (err) return res.status(500).end(err);
-//                // Remove from fs
-//                file.unlink(image.path, function (err) {
-//                    if (err) return res.status(500).end(err);
-//                    res.json(image);
-//                });
-//            });
-//        });
-//    });
-//});
 
-//app.delete('/api/comments/:id', isAuthenticated, function (req, res, next) {
-//    comments.findOne({_id: req.params.id}, function(err, comment) {
-//        if (err) return res.status(500).end(err);
-//        if (!comment) return res.status(404).end("Comment with id # " + req.params.id + " does not exist.");
-//        comments.remove({_id: req.params.id}, {multi: false}, function(err) {
-//            if (err) return res.status(500).end(err);
-//            res.json(comment);
-//        });
-//    });
-//});
+/// Update
+app.put('/api/users/:username', isAuthenticated, isSameUser, function (req, res, next) {
+//app.put('/api/users/:username', isAuthenticated, function (req, res, next) {
+    // Update the data for the user
+    const dbConnect = dbo.getDb();
+    // Get the user
+    dbConnect.collection('users').findOne({username: req.params.username}, function (err, user) {
+
+        const updateDoc = { $set: {
+            "email": req.body.email || user.email, 
+            "firstName" : req.body.firstName || user.firstName, 
+            "lastName" : req.body.lastName || user.lastName, 
+            "city" : req.body.city || user.city, 
+            "phone": req.body.phone || user.phone, 
+        } };
+        dbConnect.collection('users').updateOne({username: req.params.username}, updateDoc, function (err, updateStatus) {
+            if (err) return res.status(500).end(err);
+            res.json(updateStatus);
+        });
+    });
+})
+
+/// Delete
+
 
 const http = require('http');
 const { fstat } = require('fs');
