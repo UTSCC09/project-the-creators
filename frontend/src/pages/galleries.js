@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 import Local from "./Local";
 import Shared from "./Shared";
 
-const galleries = () => {
+const Galleries = () => {
   return (
     <>
       <Header />
@@ -22,4 +22,4 @@ const galleries = () => {
   );
 };
 
-export default galleries;
+export default Galleries;
