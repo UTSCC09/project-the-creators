@@ -257,10 +257,16 @@ app.get('/api/gallery/:id/:isShared', isAuthenticated, function (req, res, next)
 //});
 
 const http = require('http');
+const httpServer = http.createServer(app);
+const io = require('socket.io')(httpServer, {
+    cors: {
+        origin: '*',
+    }
+});
 const { fstat } = require('fs');
 const { isatty } = require('tty');
 const PORT = 3001;
-
+2
 
 dbo.connectToServer(function (err) {
     if (err) {
@@ -269,9 +275,15 @@ dbo.connectToServer(function (err) {
     }
 
     // start the Express server
-    http.createServer(app).listen(PORT, function (err) {
+    httpServer.listen(PORT, function (err) {
         if (err) console.log(err);
         else console.log("HTTP server on http://localhost:%s", PORT);
     });
-});
 
+    io.on('connection', (socket) => {
+
+        socket.on('sendStroke', (data) => {
+            socket.broadcast.emit('receiveStroke', data);
+        });
+    });
+});
