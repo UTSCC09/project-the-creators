@@ -43,7 +43,7 @@ const UserProfile = () => {
 
   const Savechanges = async (data) => {
     await axios
-      .put(`/api/user/${status.user.uid}`, {
+      .put(`/api/users/${status.user.uid}`, {
         email: data.email,
         password: data.password,
         phone_number: data.phonenumber,
