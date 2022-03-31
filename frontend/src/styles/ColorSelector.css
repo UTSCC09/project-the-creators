@@ -1,0 +1,24 @@
+#colour-selector {
+    height: 50px;
+    width: 150px;
+    position: absolute;
+    display: flex;
+    z-index: 9;
+}
+
+#colour-red {
+    /* background: 'red'; */
+    height: 50px;
+    width: 50px;
+}
+
+#colour-black {
+    /* background: 'red'; */
+    height: 50px;
+    width: 50px;
+}
+#colour-blue {
+    /* background: 'red'; */
+    height: 50px;
+    width: 50px;
+}

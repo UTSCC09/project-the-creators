@@ -1,0 +1,68 @@
+/* Credits:
+https://www.flaticon.com/premium-icon/eraser_3512599?term=eraser&page=1&position=41&page=1&position=41&related_id=3512599
+https://www.flaticon.com/premium-icon/pen_3071810?related_id=3071810&origin=search
+https://www.flaticon.com/premium-icon/brush_2071369?related_id=2071369&origin=search
+https://www.flaticon.com/free-icon/brush_2779764 */
+
+#canvas-container {
+    height: 1080px;
+    width: 1920px;
+}
+
+#main-canvas {
+        height: 1080px;
+        width: 1920px;
+}
+
+#toolbar-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 100px;
+    height: 500px;
+    width: 100px;
+    z-index: 2;
+    background: #eeeeee;
+    box-shadow: 0px 0px 5px #8A8A8A;
+    padding: 10px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+/* Credits: https://codepen.io/davecross/pen/dpNrQg */
+.canvas-tools {
+    width: 75px;
+    padding: 15px;
+    background-image: linear-gradient(dodgerblue, dodgerblue);
+    background-size: 0 5px, auto;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    transition: all .2s ease-out;
+}
+
+.canvas-tools:hover {
+    background-size: 100% 5px, auto;
+    cursor: pointer;
+}
+
+
+#default-brush {
+    /* background-size: 100% 5px; */
+    content: url("../media/default-brush.png");
+}
+
+#pencil-brush {
+    content: url("../media/pen.png");
+}
+
+#gradient-brush {
+    content: url("../media/gradient-brush.png");
+}
+
+#eraser-button {
+    content: url("../media/eraser.png");
+}
+
+p {
+    font-weight: 700;
+}

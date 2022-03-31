@@ -1,0 +1,5 @@
+backend/db/data
+db/log
+.idea
+node_modules
+*.bat
