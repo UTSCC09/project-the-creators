@@ -5,13 +5,13 @@ https://www.flaticon.com/premium-icon/brush_2071369?related_id=2071369&origin=se
 https://www.flaticon.com/free-icon/brush_2779764 */
 
 #canvas-container {
-    height: 100%;
-    width: 100%;
+    height: 1080px;
+    width: 1920px;
 }
 
 #main-canvas {
-    height: 100%;
-    width: 100%;
+        height: 1080px;
+        width: 1920px;
 }
 
 #toolbar-container {

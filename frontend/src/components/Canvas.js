@@ -5,6 +5,7 @@ import Slider from '@mui/material/Slider';
 
 import ColorPicker from './ColorPicker';
 import StrokeSizeSelector from './StrokeSizeSelector';
+import { imageListClasses } from '@mui/material';
 
 // Credits to help create the collaborative white board
 // Credits: https://www.youtube.com/watch?v=FLESHMJ-bI0
@@ -40,7 +41,6 @@ function Canvas() {
   const [isDefaultBrush, setIsDefaultBrush] = useState(true);
   const [isEraser, setIsEraser] = useState(false);
   const [isPencil, setIsPencil] = useState(false);
-  const [strokeSizeDisplay, setStrokeSizeDisplay] = useState(false);
   const [hue, setHue] = useState(0);
 
   const makeConnection = () => {
@@ -75,23 +75,30 @@ function Canvas() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.width = window.innerWidth * 2;
-    canvas.height = window.innerHeight * 2;
-    canvas.style.width = `${window.innerWidth}px`; // Set the width of the canvas
-    canvas.style.height = `${window.innerHeight}px`; // Set the height of the canvas
-
+    canvas.width = 1920;
+    canvas.height = 1080;
     const canvasContext = canvas.getContext("2d");
-    canvasContext.scale(2,2);
     contextRef.current = canvasContext;
 
     changeStrokeType(DEFAULT);
+
+    if (!localStorage.getItem('test')){
+      localStorage.setItem('test', JSON.stringify({t: ''}));
+    } else {
+      console.log(JSON.parse(localStorage.getItem('test')).t);
+      var img = new Image();
+      img.onload = function(){
+        canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.src = JSON.parse(localStorage.getItem('test')).t;
+    }
 
     makeConnection();
   }, []);
 
   const beginDraw = (e) => {
-    currentX = e.clientX;
-    currentY = e.clientY;
+    currentX = e.pageX;
+    currentY = e.pageY;
     setIsDrawing(true);
   };
 
@@ -99,14 +106,15 @@ function Canvas() {
     if(isDrawing){
       drawBrush(e);
       setIsDrawing(false);
+      localStorage.setItem('test', JSON.stringify({t: document.getElementById('main-canvas').toDataURL()}));
     }
   };
 
   const drawLine = (e) => {
     if(isDrawing){
       drawBrush(e);
-      currentX = e.clientX;
-      currentY = e.clientY;
+      currentX = e.pageX;
+      currentY = e.pageY;
     }
   };
 
@@ -114,17 +122,17 @@ function Canvas() {
   const drawBrush = (e) => {
     if(isGradientBrush){
       var gradientStroke = `hsl(${hue}, 100%, 50%)`;
-      drawing(currentX, currentY, e.clientX, e.clientY, lineStyle, 1, gradientStroke, lineWidth, true);
+      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, 1, gradientStroke, lineWidth, true);
       setHue(hue + 1);
       if(hue >= 360) {
         setHue(0);
       }
     } else if(isPencil){
-      drawing(currentX, currentY, e.clientX, e.clientY, lineStyle, lineOpacity, strokeColour, 1, true);
+      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, lineOpacity, strokeColour, 1, true);
     } else if(isEraser){
-      drawing(currentX, currentY, e.clientX, e.clientY, lineStyle, 1, '#FFFFFF', lineWidth, true);
+      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, 1, '#FFFFFF', lineWidth, true);
     } else {
-      drawing(currentX, currentY, e.clientX, e.clientY, lineStyle, lineOpacity, strokeColour, lineWidth, true);
+      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, lineOpacity, strokeColour, lineWidth, true);
     }
   }
 
