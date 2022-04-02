@@ -1,0 +1,60 @@
+#brush-size-button {
+    content: url("../media/brush-size.png");
+    width: 75px;
+    padding: 15px;
+}
+
+#brush-size-button:hover {
+    cursor: pointer;
+}
+
+
+#brush-size-box {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    left: 100px;
+    height: 250px;
+    width: 250px;
+    top: 95px;
+    /* background-color: #d3d3d3; */
+    box-shadow: 0px 0px 5px #8A8A8A;
+    align-items: center;
+}
+
+#brush-size-cover {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
+#slider-box {
+    width: 250px;
+    height: 50px;
+    background-color: white;
+}
+
+#preview-box {
+    width: 250px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to bottom right, #F5F7FA, #B8C6DB);
+}
+
+#preview-stroke {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+}
+
+#brush-size-slider {
+    position: relative;
+    width: 170px;
+    top: 10px;
+    left: 40px;
+}
