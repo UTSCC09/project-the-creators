@@ -11,6 +11,11 @@ const cors = require('cors');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 
+const root = require('./graphql/root');
+const context = require('./graphql/context');
+const schema = require('./graphql/schema');
+
+
 const dbo = require('./db/conn');
 
 const app = express();
@@ -197,24 +202,25 @@ app.get('/api/gallery/:id/:isShared', isAuthenticated, function (req, res, next)
     });
 });
 
-// Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
+// Collaboration
+app.get('/canvas/:id', isAuthenticated, function (req, res, next) {
+    const dbConnect = dbo.getDb();
+    // Check if the user 
+    //const reqUser = req.params.id;
+    //const isShared = req.params.isShared;
+    //if (!(isShared) && req.username != reqUser)
+    //    return res.status(401).end("cannot view user " + reqUser + "'s private gallery");
+    //dbConnect.collection('canvases').find({creator: reqUser, isShared: JSON.parse(isShared.toLowerCase()), collaborators: req.username}).toArray(function (err, canvases) {
+    //    if (err) return res.status(500).end(err);
+    //    res.json(canvases);
+    //});
+})
 
-var root = {
-    hello: () => {
-      return 'Hello world!';
-    },
-  };
-
-  
   app.use('/graphql', graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
+    context: context,
   }));
 
 
@@ -253,7 +259,7 @@ const io = require('socket.io')(httpServer, {
 const { fstat } = require('fs');
 const { isatty } = require('tty');
 const PORT = 3001;
-2
+
 
 dbo.connectToServer(function (err) {
     if (err) {
