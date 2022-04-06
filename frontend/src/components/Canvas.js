@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import io from 'socket.io-client';
-import '../styles/Canvas.css';
-import Slider from '@mui/material/Slider';
+import React, { useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
+import "../styles/Canvas.css";
+import Slider from "@mui/material/Slider";
+import Chat from "./Chat";
 
-import ColorPicker from './ColorPicker';
-import StrokeSizeSelector from './StrokeSizeSelector';
-import { imageListClasses } from '@mui/material';
+import ColorPicker from "./ColorPicker";
+import StrokeSizeSelector from "./StrokeSizeSelector";
+import { imageListClasses } from "@mui/material";
 
 // Credits to help create the collaborative white board
 // Credits: https://www.youtube.com/watch?v=FLESHMJ-bI0
@@ -22,12 +23,11 @@ var socket = null;
 
 // Brush ENUM
 var DEFAULT = 1;
-var PENCIL = 2
+var PENCIL = 2;
 var GRADIENT = 3;
 var ERASER = 4;
 
 function Canvas() {
-
   const canvasRef = useRef();
   const contextRef = useRef();
 
@@ -44,20 +44,29 @@ function Canvas() {
   const [hue, setHue] = useState(0);
 
   const makeConnection = () => {
-    socket = io('http://localhost:3001');
+    socket = io("http://localhost:3001");
 
     socket.on("receiveStroke", (data) => {
       onStrokeReceived(data);
     });
-  }
+  };
 
   const onStrokeReceived = (payloadData) => {
-    drawing(payloadData.x0, payloadData.y0, payloadData.x1, payloadData.y1,
-      payloadData.lineStyle, payloadData.lineOpacity, payloadData.strokeColour, payloadData.lineWidth, false);
-  }
+    drawing(
+      payloadData.x0,
+      payloadData.y0,
+      payloadData.x1,
+      payloadData.y1,
+      payloadData.lineStyle,
+      payloadData.lineOpacity,
+      payloadData.strokeColour,
+      payloadData.lineWidth,
+      false
+    );
+  };
 
   const sendStroke = (x0, y0, x1, y1, lStyle, lOpacity, sColour, lWidth) => {
-    if(socket) {
+    if (socket) {
       let canvasStroke = {
         x0: x0,
         y0: y0,
@@ -66,12 +75,12 @@ function Canvas() {
         lineStyle: lStyle,
         lineOpacity: lOpacity,
         strokeColour: sColour,
-        lineWidth: lWidth
+        lineWidth: lWidth,
       };
 
-      socket.emit('sendStroke', canvasStroke);
+      socket.emit("sendStroke", canvasStroke);
     }
-  }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -82,15 +91,15 @@ function Canvas() {
 
     changeStrokeType(DEFAULT);
 
-    if (!localStorage.getItem('test')){
-      localStorage.setItem('test', JSON.stringify({t: ''}));
+    if (!localStorage.getItem("test")) {
+      localStorage.setItem("test", JSON.stringify({ t: "" }));
     } else {
-      console.log(JSON.parse(localStorage.getItem('test')).t);
+      console.log(JSON.parse(localStorage.getItem("test")).t);
       var img = new Image();
-      img.onload = function(){
+      img.onload = function () {
         canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
       };
-      img.src = JSON.parse(localStorage.getItem('test')).t;
+      img.src = JSON.parse(localStorage.getItem("test")).t;
     }
 
     makeConnection();
@@ -103,40 +112,94 @@ function Canvas() {
   };
 
   const endDraw = (e) => {
-    if(isDrawing){
+    if (isDrawing) {
       drawBrush(e);
       setIsDrawing(false);
-      localStorage.setItem('test', JSON.stringify({t: document.getElementById('main-canvas').toDataURL()}));
+      localStorage.setItem(
+        "test",
+        JSON.stringify({
+          t: document.getElementById("main-canvas").toDataURL(),
+        })
+      );
     }
   };
 
   const drawLine = (e) => {
-    if(isDrawing){
+    if (isDrawing) {
       drawBrush(e);
       currentX = e.pageX;
       currentY = e.pageY;
     }
   };
 
-
   const drawBrush = (e) => {
-    if(isGradientBrush){
+    if (isGradientBrush) {
       var gradientStroke = `hsl(${hue}, 100%, 50%)`;
-      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, 1, gradientStroke, lineWidth, true);
+      drawing(
+        currentX,
+        currentY,
+        e.pageX,
+        e.pageY,
+        lineStyle,
+        1,
+        gradientStroke,
+        lineWidth,
+        true
+      );
       setHue(hue + 1);
-      if(hue >= 360) {
+      if (hue >= 360) {
         setHue(0);
       }
-    } else if(isPencil){
-      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, lineOpacity, strokeColour, 1, true);
-    } else if(isEraser){
-      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, 1, '#FFFFFF', lineWidth, true);
+    } else if (isPencil) {
+      drawing(
+        currentX,
+        currentY,
+        e.pageX,
+        e.pageY,
+        lineStyle,
+        lineOpacity,
+        strokeColour,
+        1,
+        true
+      );
+    } else if (isEraser) {
+      drawing(
+        currentX,
+        currentY,
+        e.pageX,
+        e.pageY,
+        lineStyle,
+        1,
+        "#FFFFFF",
+        lineWidth,
+        true
+      );
     } else {
-      drawing(currentX, currentY, e.pageX, e.pageY, lineStyle, lineOpacity, strokeColour, lineWidth, true);
+      drawing(
+        currentX,
+        currentY,
+        e.pageX,
+        e.pageY,
+        lineStyle,
+        lineOpacity,
+        strokeColour,
+        lineWidth,
+        true
+      );
     }
-  }
+  };
 
-  const drawing = (x0, y0, x1, y1, lStyle, lOpacity, sColour, lWidth, toSend) => {
+  const drawing = (
+    x0,
+    y0,
+    x1,
+    y1,
+    lStyle,
+    lOpacity,
+    sColour,
+    lWidth,
+    toSend
+  ) => {
     const canvasContext = canvasRef.current.getContext("2d");
     contextRef.current.beginPath();
     contextRef.current.moveTo(x0, y0);
@@ -154,56 +217,82 @@ function Canvas() {
     if (toSend) {
       sendStroke(x0, y0, x1, y1, lStyle, lOpacity, sColour, lWidth);
     }
-  }
+  };
 
   const changeStrokeType = (strokeType) => {
     setIsDefaultBrush(false);
     setIsPencil(false);
     setIsGradientBrush(false);
     setIsEraser(false);
-    document.getElementById('default-brush').style.backgroundSize = '';
-    document.getElementById('pencil-brush').style.backgroundSize = '';
-    document.getElementById('gradient-brush').style.backgroundSize = '';
-    document.getElementById('eraser-button').style.backgroundSize = '';
-    if(strokeType == DEFAULT){
+    document.getElementById("default-brush").style.backgroundSize = "";
+    document.getElementById("pencil-brush").style.backgroundSize = "";
+    document.getElementById("gradient-brush").style.backgroundSize = "";
+    document.getElementById("eraser-button").style.backgroundSize = "";
+    if (strokeType == DEFAULT) {
       setIsDefaultBrush(true);
-      document.getElementById('default-brush').style.backgroundSize = '100% 5px, auto';
-    } else if (strokeType == PENCIL){
+      document.getElementById("default-brush").style.backgroundSize =
+        "100% 5px, auto";
+    } else if (strokeType == PENCIL) {
       setIsPencil(true);
-      document.getElementById('pencil-brush').style.backgroundSize = '100% 5px, auto';
-    } else if (strokeType == GRADIENT){
+      document.getElementById("pencil-brush").style.backgroundSize =
+        "100% 5px, auto";
+    } else if (strokeType == GRADIENT) {
       setIsGradientBrush(true);
-      document.getElementById('gradient-brush').style.backgroundSize = '100% 5px, auto';
-    } else if (strokeType == ERASER){
+      document.getElementById("gradient-brush").style.backgroundSize =
+        "100% 5px, auto";
+    } else if (strokeType == ERASER) {
       setIsEraser(true);
-      document.getElementById('eraser-button').style.backgroundSize = '100% 5px, auto';
+      document.getElementById("eraser-button").style.backgroundSize =
+        "100% 5px, auto";
     }
-  }
+  };
 
-  const displayStrokeSize = () => {
-
-  }
+  const displayStrokeSize = () => {};
 
   return (
     <div>
-      <div id='toolbar-container'>
-        <ColorPicker setStrokeColour={setStrokeColour} setLineOpacity={setLineOpacity}/>
-        <StrokeSizeSelector setLineWidth={setLineWidth} lineWidth={lineWidth}/>
+      <div id="toolbar-container">
+        <ColorPicker
+          setStrokeColour={setStrokeColour}
+          setLineOpacity={setLineOpacity}
+        />
+        <StrokeSizeSelector setLineWidth={setLineWidth} lineWidth={lineWidth} />
         {/* <p>Tools</p> */}
-        <div id='toolbar-tools'>
-          <div id='default-brush' className='canvas-tools' onClick={() => changeStrokeType(DEFAULT)}></div>
-          <div id='pencil-brush' className='canvas-tools' onClick={() => changeStrokeType(PENCIL)}></div>
-          <div id='gradient-brush' className='canvas-tools' onClick={() => changeStrokeType(GRADIENT)}>Gradient</div>
-          <div id='eraser-button' className='canvas-tools' onClick={() => changeStrokeType(ERASER)}>Eraser</div>
+        <div id="toolbar-tools">
+          <div
+            id="default-brush"
+            className="canvas-tools"
+            onClick={() => changeStrokeType(DEFAULT)}
+          ></div>
+          <div
+            id="pencil-brush"
+            className="canvas-tools"
+            onClick={() => changeStrokeType(PENCIL)}
+          ></div>
+          <div
+            id="gradient-brush"
+            className="canvas-tools"
+            onClick={() => changeStrokeType(GRADIENT)}
+          >
+            Gradient
+          </div>
+          <div
+            id="eraser-button"
+            className="canvas-tools"
+            onClick={() => changeStrokeType(ERASER)}
+          >
+            Eraser
+          </div>
         </div>
       </div>
+      <Chat />
       <canvas
-      id='main-canvas'
-      ref={canvasRef}
-      onMouseDown={beginDraw}
-      onMouseUp={endDraw}
-      onMouseMove={drawLine}>
-    </canvas>
+        id="main-canvas"
+        ref={canvasRef}
+        onMouseDown={beginDraw}
+        onMouseUp={endDraw}
+        onMouseMove={drawLine}
+      ></canvas>
     </div>
   );
 }
