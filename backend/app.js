@@ -17,7 +17,8 @@ const schema = require('./graphql/schema');
 const dbo = require('./db/conn');
 
 var corsOptions = {
-    origin: '*',
+    credentials: true,
+    origin: 'http://localhost:3000',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
@@ -38,10 +39,11 @@ app.use(bodyParser.json());
 app.use(express.static('../frontend'));
 
 app.use(function (req, res, next){
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    req.username = (req.session.username) ? req.session.username : '';
-    console.log("HTTP request", req.method, req.url, req.body);
+    let cookies = cookie.parse(req.headers.cookie || '');
+    console.log('a', cookies)
+    req.username = (cookies.username) ? cookies.username : '';
+    console.log("HTTP request", req.username, req.method, req.url, req.body);
     next();
 });
 
@@ -107,7 +109,6 @@ app.post('/auth/signup/', function (req, res, next) {
                     maxAge: 60 * 60 * 24 * 7
                 }));
                 return res.json(username);
-                //res.status(204).send();
             })
         })
     });
@@ -115,8 +116,7 @@ app.post('/auth/signup/', function (req, res, next) {
 
 app.post('/auth/signin/', function (req, res, next) {
     const dbConnect = dbo.getDb();
-    req.session.username = req.body.username;
-    const username = req.session.username;
+    const username = req.body.username;
     const password = req.body.password;
     // retrieve user from the database
     dbConnect.collection('users').findOne({username: username}, function (err, user) {
@@ -131,6 +131,7 @@ app.post('/auth/signin/', function (req, res, next) {
                 path : '/', 
                 maxAge: 60 * 60 * 24 * 7
             }));
+            req.session.username = req.body.username;
             return res.json(username);
         });
     });

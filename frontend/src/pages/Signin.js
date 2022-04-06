@@ -19,7 +19,8 @@ const Sign = () => {
       .post(authUrl + "/signin", {
         username: details.name,
         password: details.password,
-      })
+      }, 
+      { withCredentials: true })
       .then(() => {
         setPass(true);
       })
