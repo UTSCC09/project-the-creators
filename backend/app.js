@@ -14,12 +14,16 @@ const { buildSchema } = require('graphql');
 const root = require('./graphql/root');
 const context = require('./graphql/context');
 const schema = require('./graphql/schema');
-
-
 const dbo = require('./db/conn');
 
+var corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(session({
     secret: 'thisisasecret',
     resave: false,
@@ -34,6 +38,8 @@ app.use(bodyParser.json());
 app.use(express.static('../frontend'));
 
 app.use(function (req, res, next){
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     req.username = (req.session.username) ? req.session.username : '';
     console.log("HTTP request", req.method, req.url, req.body);
     next();
@@ -64,21 +70,16 @@ let Canvas = function (req) {
     this.date = date.toUTCString();
 };
 
-
 const isAuthenticated = function(req, res, next) {
     if (!req.username) return res.status(401).end("access denied");
     next();
 };
 
 const isSameUser = function(req, res, next) {
-    // TODO: deal with cases where username isnt in req
-    console.log("req user", req.username);
-    console.log("req params user", req.params.username);
     if (req.username !== req.params.username) return res.status(401).end("access denied");
     next();
 }
 
-// curl -H "Content-Type: application/json" -X POST -d '{"username":"alice","password":"alice"}' -c cookie.txt localhost:3000/signup/
 app.post('/auth/signup/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     const username = req.body.username;
@@ -145,6 +146,10 @@ app.get('/auth/signout/', function (req, res, next) {
         if (err) return res.status(500).end(err);
         res.json(null);
     });
+});
+
+app.get('/auth/currentUser/', isAuthenticated, function (req, res, next) {
+    res.json(req.username);
 });
 
 /// Create
