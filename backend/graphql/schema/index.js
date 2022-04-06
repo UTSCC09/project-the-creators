@@ -2,7 +2,8 @@ const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
   type Query {
-    getUser(id: ID!): User
+    getUser(username: String!): User
+    getAllUsers: [User]
     getCanvas(id: ID!): Canvas
   }
 

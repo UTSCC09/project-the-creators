@@ -1,6 +1,9 @@
 module.exports = {
     getUser: function(args, context) {
-      return context.repository.user.getUser(args.id);
+      return context.repository.user.getUser(args.username);
+    },
+    getAllUsers: function(args, context) {
+      return context.repository.user.getAllUsers();
     },
     createUser: function(args, context) {
       return context.repository.user.createUser(args.input.firstName, args.input.lastName);
