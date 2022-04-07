@@ -12,7 +12,7 @@ const Galleries = () => {
   const [status, setStatus] = useState({ isLoggedIn: false, user: null });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  /* useEffect(() => {
     axios
       .get("/auth/user")
       .then((res) => {
@@ -22,7 +22,7 @@ const Galleries = () => {
       .catch(() => {
         setLoading(false);
       });
-  }, []);
+  }, []); */
 
   useEffect(() => {
     axios
@@ -30,9 +30,14 @@ const Galleries = () => {
       .then((res) => {
         if (res.data !== "") {
           setStatus({ isLoggedIn: true, user: res.data });
+          setLoading(false);
+          //console.log(status.user);
         } else {
           setStatus({ isLoggedIn: false, user: null });
         }
+      })
+      .catch(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -52,20 +57,23 @@ const Galleries = () => {
   return (
     <>
       <Header />
-      <div></div>
-      <Container className="pt-5 pb-3">
-        <Button className="mb-3" variant="primary" onClick={newproject}>
-          Start a new project
-        </Button>
-        <Tabs defaultActiveKey="shared" id="accountPG" className="">
-          <Tab eventKey="shared" title="Shared">
-            <Shared data={status.user} />
-          </Tab>
-          <Tab eventKey="local" title="Local">
-            <Local data={status.user} />
-          </Tab>
-        </Tabs>
-      </Container>
+      {loading ? (
+        <div>loading...</div>
+      ) : (
+        <Container className="pt-5 pb-3">
+          <Button className="mb-3" variant="primary" onClick={newproject}>
+            Start a new project
+          </Button>
+          <Tabs defaultActiveKey="shared" id="accountPG" className="">
+            <Tab eventKey="shared" title="Shared">
+              <Shared data={status.user} />
+            </Tab>
+            <Tab eventKey="local" title="Local">
+              <Local data={status.user} />
+            </Tab>
+          </Tabs>
+        </Container>
+      )}
     </>
   );
 };
