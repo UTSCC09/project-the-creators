@@ -43,6 +43,7 @@ app.use(function (req, res, next){
     let cookies = cookie.parse(req.headers.cookie || '');
     console.log('a', cookies)
     req.username = (cookies.username) ? cookies.username : '';
+    context.user = req.username;
     console.log("HTTP request", req.username, req.method, req.url, req.body);
     next();
 });
@@ -222,12 +223,14 @@ app.get('/canvas/:id', isAuthenticated, function (req, res, next) {
     //});
 })
 
-  app.use('/graphql', graphqlHTTP({
+console.log(root);
+
+app.use('/graphql', graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
     context: context,
-  }));
+}));
 
 
 /// Update

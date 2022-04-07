@@ -1,11 +1,11 @@
 module.exports = class Canvas {
-    constructor(title, creator, isShared) {
+    constructor(title, creator, isShared, thumbnailPath, collaborators) {
         const date = new Date();
         this.title = title; 
         this.creator = creator;
-        this.path = '';
         this.isShared = isShared;
-        this.collaborators = [creator];
+        this.thumbnailPath = thumbnailPath;
+        this.collaborators = collaborators;
         this.date = date.toUTCString();
     }
 }

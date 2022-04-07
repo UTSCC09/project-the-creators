@@ -4,13 +4,15 @@ module.exports = buildSchema(`
   type Query {
     getUser(username: String!): User
     getAllUsers: [User]
-    getCanvas(id: ID!): Canvas
+    getCanvas(creator: String!, title: String!): Canvas
+    getCanvases(creator: String!, isShared: Boolean!): [Canvas]
   }
 
   type Mutation {
     createUser(input: NewUserInput): User
     updateUser(input: UpdateUserInput): User
     createCanvas(input: NewCanvasInput): Canvas
+    updateCanvas(input: UpdateCanvasInput): Canvas
   }
 
   type User {
@@ -28,9 +30,9 @@ module.exports = buildSchema(`
     id: ID!
     title: String!
     creator: String!
-    thumbnail: String
+    thumbnailPath: String
     isShared: Boolean!
-    collaborators: [User]
+    collaborators: [String]
   }
 
   input NewUserInput {
@@ -53,7 +55,13 @@ module.exports = buildSchema(`
 
   input NewCanvasInput {
     title: String!
-    creator: String!
     isShared: Boolean!
+  }
+
+  input UpdateCanvasInput {
+    title: String!
+    thumbnailPath: String
+    isShared: Boolean
+    collaborators: [String]
   }
 `);
