@@ -27,7 +27,7 @@ module.exports = buildSchema(`
   }
 
   type Canvas {
-    id: ID!
+    _id: ID!
     title: String!
     creator: String!
     thumbnailPath: String

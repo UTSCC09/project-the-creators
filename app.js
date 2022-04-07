@@ -36,8 +36,8 @@ app.use(session({
 
 const saltedRounds = 10;
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: '25mb', extended: false }));
+app.use(bodyParser.json({limit: '25mb'}));
 
 app.use(express.static('/frontend'));
 
@@ -118,7 +118,7 @@ app.post('/auth/signup/', function (req, res, next) {
     });
 });
 
-app.post('/auth/signin/', function (req, res, next) {
+app.post('/signin/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     const username = req.body.username;
     const password = req.body.password;

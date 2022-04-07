@@ -2,6 +2,18 @@ const Canvas = require('../models/Canvas');
 const dbo = require('../../db/conn');
 
 module.exports = class CanvasRepository {
+    async getCanvas(creator, title) {
+        try {
+            const dbConnect = dbo.getDb();
+            let result = await dbConnect.collection('canvases').findOne({creator: creator, title: title});
+            console.log(result)
+            return result;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err)
+        }        
+    }
+
     async getCanvases(creator, isShared, currentUser) {
         try {
             const dbConnect = dbo.getDb();

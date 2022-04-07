@@ -1,0 +1,103 @@
+.user-gallery {
+    width: 1500px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user-gallery-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 250px;
+    margin: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    transition: width 0.2s, height 0.2s;
+}
+
+.user-gallery
+
+.user-gallery-card-image {
+    height: 200px;
+    /* content: url("../media/add.png"); */
+    z-index: 1;
+}
+
+.user-gallery-card:hover {
+    height: 245px;
+    /* width: 305px; */
+    cursor: pointer;
+}
+
+.user-gallery-card-name {
+    /* position: absolute; */
+    bottom: 0px;
+    height: 50px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 0px 8px;
+    /* background: black; */
+    font-weight: bold;
+    color: black;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 2;
+}
+
+#add-local-canvas {
+    width: 300px;
+    height: 250px;
+    margin: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    border: dashed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+#add-local-canvas:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.user-gallery-add-image {
+    height: 15px;
+    width: 15px;
+    content: url("../media/add.png");
+}
+
+.create-canvas-form {
+    width: 300px;
+    height: 250px;
+    margin: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    border: dashed;
+    opacity: 0.5;
+    transition: 0.3s;
+    display: none;
+    flex-direction: column;
+}
+
+#canvas-title {
+    position: relative;
+    top: 75px;
+    height: 50px;
+    width: 280px;
+    margin: 8px;
+}
+
+.canvas-form-button {
+    position: relative;
+    width: 125px;
+    height: 30px;
+    margin: 5px;
+    top: 75px;
+    left: 10px;
+}

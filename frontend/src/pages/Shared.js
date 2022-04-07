@@ -58,7 +58,7 @@ const Shared = ({ data }) => {
             <Button
               variant="primary"
               onClick={() => {
-                window.location.href = `/MockCanvas`;
+                window.location.href = `/Canvas`;
               }}
             >
               View
