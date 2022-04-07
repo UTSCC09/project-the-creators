@@ -6,10 +6,11 @@ module.exports = class UserRepository {
         try {
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('users').findOne({username: username});
-            console.log(result)
+            if (!result)
+                throw new Error("User does not exist with that username")
             return result;
         } catch (err) {
-            console.log(err);
+            throw new Error(err)
         }
     }
 
@@ -17,11 +18,9 @@ module.exports = class UserRepository {
         try {
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('users').find({}).toArray();
-            console.log(result)
             return result;
-    
         } catch (err) {
-            console.log(err);
+            throw new Error(err)
         }
     }
 }
