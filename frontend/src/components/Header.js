@@ -1,19 +1,34 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { authUrl, apiUrl } from "../lib/constants.js";
 
 const Header = () => {
   const [status, setStatus] = useState({ isLoggedIn: false, user: null });
-
   const signout = async () => {
-    await axios.post("/auth/signout").then(() => {
-      window.location = "/";
-    });
+    await axios
+      .get(authUrl + "/signout", { withCredentials: true })
+      .then(() => {
+        setStatus({ isLoggedIn: false, user: null });
+        window.location = "/";
+      });
   };
 
-  /* useEffect(() => {
-    axios.get("/auth/user").then((res) => setStatus(res.data));
-  }, []); */
+  useEffect(() => {
+    axios
+      .get(authUrl + "/currentUser", { withCredentials: true })
+      .then((res) => {
+        //console.log(res.data);
+        //console.log(status);
+        if (res.data !== "") {
+          //console.log("here");
+          setStatus({ isLoggedIn: true, user: res.data });
+          //console.log(status);
+        } else {
+          setStatus({ isLoggedIn: false, user: null });
+        }
+      });
+  }, []);
 
   return (
     <>
@@ -21,19 +36,25 @@ const Header = () => {
         <Container>
           <Navbar.Brand href="/">Envisionit</Navbar.Brand>
           <Nav className="me-auto">
-            {status.isLoggedIn ? (
-              <Nav.Link href="/">Sign out</Nav.Link>
-            ) : (
-              <Nav.Link href="/signin">Sign in/up</Nav.Link>
+            {status.isLoggedIn && (
+              <Nav.Link href="/galleries">Galleries</Nav.Link>
             )}
-            <Nav.Link href="/galleries">Galleries</Nav.Link>
           </Nav>
 
           <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-              Signed in as: <a href="/markotto">Mark Otto</a>
-            </Navbar.Text>
-            <Nav.Link href="/">Sign out</Nav.Link>
+            {status.isLoggedIn && (
+              <Navbar.Text>
+                Signed in as: <a href="/markotto">{status.user}</a>
+              </Navbar.Text>
+            )}
+            {status.isLoggedIn && (
+              <Nav.Link onClick={signout}>Sign out</Nav.Link>
+            )}
+            <Nav>
+              {!status.isLoggedIn && (
+                <Nav.Link href="/signin">Sign in/up</Nav.Link>
+              )}
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
