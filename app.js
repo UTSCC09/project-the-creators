@@ -28,6 +28,9 @@ app.use(cors(corsOptions));
 app.use(session({
     secret: 'thisisasecret',
     resave: false,
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
     saveUninitialized: true
 }));
 
@@ -36,7 +39,7 @@ const saltedRounds = 10;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static('../frontend'));
+app.use(express.static('/frontend'));
 
 app.use(function (req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
