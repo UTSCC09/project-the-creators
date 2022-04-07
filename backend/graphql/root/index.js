@@ -10,5 +10,8 @@ module.exports = {
     },
     updateUser: function(args, context) {
       return context.repository.user.updateUser(args.input.id, args.input.firstName, args.input.lastName);
-    }
+    },
+    createCanvas: function(args, context) {
+      return context.repository.canvas.createCanvas(args.input.title, args.input.creator, args.input.isShared);
+    },
 };

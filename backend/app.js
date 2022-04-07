@@ -13,7 +13,7 @@ const { buildSchema } = require('graphql');
 
 const root = require('./graphql/root');
 const context = require('./graphql/context');
-const schema = require('./graphql/schema');
+const schema = require('./graphql/schema/schema');
 const dbo = require('./db/conn');
 
 var corsOptions = {

@@ -1,6 +1,6 @@
 //const users = require('./resolvers/users');
 const UserRepository = require('../repository/UserRepository');
-//const CanvasRepository = require('../repository/CanvasRepository');
+const CanvasRepository = require('../repository/CanvasRepository');
 
 module.exports = {
   resolver: {
@@ -8,6 +8,6 @@ module.exports = {
   },
   repository: {
     user: new UserRepository(),
-    //canvas: new CanvasRepository(),
+    canvas: new CanvasRepository(),
   },
 };

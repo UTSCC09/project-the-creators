@@ -10,6 +10,7 @@ module.exports = buildSchema(`
   type Mutation {
     createUser(input: NewUserInput): User
     updateUser(input: UpdateUserInput): User
+    createCanvas(input: NewCanvasInput): Canvas
   }
 
   type User {
@@ -21,6 +22,15 @@ module.exports = buildSchema(`
     lastName: String!
     city: String
     phone: String
+  }
+
+  type Canvas {
+    id: ID!
+    title: String!
+    creator: String!
+    thumbnail: String
+    isShared: Boolean!
+    collaborators: [User]
   }
 
   input NewUserInput {
@@ -41,8 +51,9 @@ module.exports = buildSchema(`
     phone: String
   }
 
-  type Canvas {
-    id: ID!
-    quote: String
+  input NewCanvasInput {
+    title: String!
+    creator: String!
+    isShared: Boolean!
   }
 `);
