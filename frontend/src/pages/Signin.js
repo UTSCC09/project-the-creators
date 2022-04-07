@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { authUrl, apiUrl } from "../lib/constants.js"
+import { authUrl, apiUrl } from "../lib/constants.js";
 import axios from "axios";
 
 const Sign = () => {
@@ -14,12 +14,17 @@ const Sign = () => {
   }, [pass]);
 
   const checkLogin = async () => {
+    console.log(details);
     setHasError(false);
     await axios
-      .post(authUrl + "/signin", {
-        username: details.name,
-        password: details.password,
-      })
+      .post(
+        authUrl + "/signin",
+        {
+          username: details.name,
+          password: details.password,
+        },
+        { withCredentials: true }
+      )
       .then(() => {
         setPass(true);
       })
