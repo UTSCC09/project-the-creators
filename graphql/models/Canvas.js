@@ -6,6 +6,6 @@ module.exports = class Canvas {
         this.isShared = isShared;
         this.thumbnailPath = thumbnailPath;
         this.collaborators = collaborators;
-        this.date = date.toUTCString();
+        this.creationDate = date.toUTCString();
     }
 }

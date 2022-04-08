@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookie = require('cookie');
 const cors = require('cors');
+const ObjectId = require('mongodb').ObjectId;
 // TODO: Credit to https://graphql.org/graphql-js/running-an-express-graphql-server/
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
@@ -44,7 +45,6 @@ app.use(express.static('/frontend'));
 app.use(function (req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     let cookies = cookie.parse(req.headers.cookie || '');
-    console.log('a', cookies)
     req.username = (cookies.username) ? cookies.username : '';
     context.user = req.username;
     console.log("HTTP request", req.username, req.method, req.url, req.body);
@@ -213,20 +213,27 @@ app.get('/api/gallery/:id/:isShared', isAuthenticated, function (req, res, next)
 });
 
 // Collaboration
-app.get('/canvas/:id', isAuthenticated, function (req, res, next) {
+app.put('/canvas/:id', isAuthenticated, function (req, res, next) {
     const dbConnect = dbo.getDb();
-    // Check if the user 
-    //const reqUser = req.params.id;
-    //const isShared = req.params.isShared;
-    //if (!(isShared) && req.username != reqUser)
-    //    return res.status(401).end("cannot view user " + reqUser + "'s private gallery");
-    //dbConnect.collection('canvases').find({creator: reqUser, isShared: JSON.parse(isShared.toLowerCase()), collaborators: req.username}).toArray(function (err, canvases) {
-    //    if (err) return res.status(500).end(err);
-    //    res.json(canvases);
-    //});
+    const canvasId =  ObjectId(req.params.id);
+    // Add the signed in username to the canvas
+    dbConnect.collection('canvases').findOne({_id: canvasId}, function (err, canvas) {
+        if (err) return res.status(500).end(err);
+        // Update the collaborators field
+        console.log(canvas)
+        let collaborators = canvas.collaborators;
+        console.log(collaborators)
+        collaborators.push(req.username);
+        const updateDoc = { $set: {
+            "collaborators": collaborators
+        } };
+        dbConnect.collection('canvases').updateOne({_id: canvasId}, updateDoc, function (err, updateStatus) {
+            if (err) return res.status(500).end(err);
+            // TODO: send redirect to canvas
+            res.json(updateStatus);
+        });
+    });
 })
-
-console.log(root);
 
 app.use('/graphql', graphqlHTTP({
     schema: schema,

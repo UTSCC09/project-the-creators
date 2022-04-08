@@ -1,12 +1,13 @@
-module.exports = {
-    constructor(username, email, password, firstName, lastName, city, phone) {
+module.exports = class User {
+    constructor(username, password, email, firstName, lastName, city, phone) {
+      const date = new Date();
       this.username = username;
-      this.email = email;
       this.password = password;
+      this.email = email;
       this.firstName = firstName;
       this.lastName = lastName;
       this.city = city;
       this.phone = phone;
-      this.creationDate = new Date();
+      this.creationDate = date.toUTCString();
     }
   }

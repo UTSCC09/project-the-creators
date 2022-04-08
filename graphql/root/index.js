@@ -18,10 +18,10 @@ module.exports = {
       return context.repository.canvas.getAllCanvases(args.isShared, context.user);
     },
     createUser: function(args, context) {
-      return context.repository.user.createUser(args.input.firstName, args.input.lastName);
+      return context.repository.user.createUser(args.input.username, args.input.password, args.input.email, args.input.firstName, args.input.lastName, args.input.city, args.input.phone);
     },
     updateUser: function(args, context) {
-      return context.repository.user.updateUser(args.input.id, args.input.firstName, args.input.lastName);
+      return context.repository.user.updateUser(context.user, args.input.email, args.input.firstName, args.input.lastName, args.input.city, args.input.phone);
     },
     createCanvas: function(args, context) {
       return context.repository.canvas.createCanvas(context.user, args.input.title, args.input.isShared);
