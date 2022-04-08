@@ -10,7 +10,6 @@ const cors = require('cors');
 const ObjectId = require('mongodb').ObjectId;
 // TODO: Credit to https://graphql.org/graphql-js/running-an-express-graphql-server/
 const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
 
 const root = require('./graphql/root');
 const context = require('./graphql/context');
