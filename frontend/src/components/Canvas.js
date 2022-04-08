@@ -46,15 +46,16 @@ function Canvas() {
   const [isEraser, setIsEraser] = useState(false);
   const [isPencil, setIsPencil] = useState(false);
   const [hue, setHue] = useState(0);
-  const [isLocal, setIsLocal] = useState(false);
+  const [isShared, setisShared] = useState(true);
   const [canvasId, setCanvasId] = useState("");
   
 
   const makeConnection = () => {
-    if(!isLocal){
+    if(isShared){
       socket = io("http://localhost:3001");
 
       socket.on("receiveStroke", (data) => {
+        console.log("test");
         onStrokeReceived(data);
     });
     }
@@ -75,13 +76,15 @@ function Canvas() {
     });
 
     console.log (data);
-    setIsLocal(data.data.data.getCanvasById.isShared);
+    setisShared(data.data.data.getCanvasById.isShared);
     setCanvasId(location.state.identifier);
+    // console.log(location.state.identifier);
 
     var canvasImage = data.data.data.getCanvasById.thumbnailPath;
 
-    if(!isLocal){
-      socket.emit('join-room', canvasId);
+    if(isShared){
+      console.log("asd");
+      socket.emit('join-room', {id: location.state.identifier});
     }
 
     const canvas = canvasRef.current;
@@ -126,7 +129,7 @@ function Canvas() {
   };
 
   const sendStroke = (x0, y0, x1, y1, lStyle, lOpacity, sColour, lWidth) => {
-    if (socket && !isLocal) {
+    if (socket && isShared) {
       let canvasStroke = {
         x0: x0,
         y0: y0,
@@ -137,8 +140,10 @@ function Canvas() {
         strokeColour: sColour,
         lineWidth: lWidth,
       };
+      
 
-      socket.emit("sendStroke", canvasStroke);
+      socket.emit("sendStroke", {canvasStroke: canvasStroke, id: canvasId});
+
     }
   };
 
@@ -261,7 +266,7 @@ function Canvas() {
     contextRef.current.stroke();
     contextRef.current.closePath();
 
-    if (toSend) {
+    if (toSend && isShared) {
       sendStroke(x0, y0, x1, y1, lStyle, lOpacity, sColour, lWidth);
     }
   };
