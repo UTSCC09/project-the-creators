@@ -6,6 +6,7 @@ module.exports = buildSchema(`
     getAllUsers: [User]
     getCanvas(creator: String!, title: String!): Canvas
     getCanvases(creator: String!, isShared: Boolean!): [Canvas]
+    getCollaboratorLink(creator: String!, title: String!): String
   }
 
   type Mutation {

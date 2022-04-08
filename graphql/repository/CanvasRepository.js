@@ -1,5 +1,6 @@
 const Canvas = require('../models/Canvas');
 const dbo = require('../../db/conn');
+const { baseUrl } = require('../../constants')
 
 module.exports = class CanvasRepository {
     async getCanvases(creator, isShared, currentUser) {
@@ -16,7 +17,7 @@ module.exports = class CanvasRepository {
         }        
     }
 
-    async createCanvas(title, creator, isShared) {
+    async createCanvas(creator, title, isShared) {
         try {
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('canvases').findOne({creator: creator, title: title});
@@ -34,7 +35,7 @@ module.exports = class CanvasRepository {
         }
     }
 
-    async updateCanvas(title, creator, thumbnail, isShared, collaborators) {
+    async updateCanvas(creator, title, thumbnail, isShared, collaborators) {
         try {
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('canvases').findOne({creator: creator, title: title});
@@ -49,6 +50,25 @@ module.exports = class CanvasRepository {
                 return a;
             } else {
                 throw new Error("Canvas could not be found")
+            }
+        } catch (err) {
+            console.log(err);
+            throw new Error(err)
+        }
+    }
+     
+    async getCollaboratorLink(creator, title, currentUser) {
+        try {
+            const dbConnect = dbo.getDb();
+            if (currentUser != creator)
+                throw new Error("Can only get canvases of your own gallery");
+            let result = await dbConnect.collection('canvases').findOne({creator: creator, title: title});
+            console.log(result)
+            if (result) {
+                // Gemerate the link that will add the collabortor to the canvas
+                const link = baseUrl + "/" + result.id;
+                console.log(link)
+                return link;
             }
         } catch (err) {
             console.log(err);
