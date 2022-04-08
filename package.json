@@ -35,7 +35,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "proxy": "http://localhost:3001",
-    "server": "node-env-run backend --exec nodemon",
+    "server": "node-env-run backend",
     "dev": "run-p server start"
   },
   "eslintConfig": {
