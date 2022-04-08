@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
-import "../styles/Canvas.css";
-import Slider from "@mui/material/Slider";
-import Chat from "./Chat";
-
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import "../styles/Canvas.css"
 import ColorPicker from "./ColorPicker";
 import StrokeSizeSelector from "./StrokeSizeSelector";
-import { imageListClasses } from "@mui/material";
+import { useHistory } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
 // Credits to help create the collaborative white board
 // Credits: https://www.youtube.com/watch?v=FLESHMJ-bI0
@@ -28,6 +28,10 @@ var GRADIENT = 3;
 var ERASER = 4;
 
 function Canvas() {
+
+  const location = useLocation();
+  // window.history.replaceState({}, document.title);
+
   const canvasRef = useRef();
   const contextRef = useRef();
 
@@ -42,14 +46,73 @@ function Canvas() {
   const [isEraser, setIsEraser] = useState(false);
   const [isPencil, setIsPencil] = useState(false);
   const [hue, setHue] = useState(0);
+  const [isShared, setisShared] = useState(true);
+  const [canvasId, setCanvasId] = useState("");
+  
 
   const makeConnection = () => {
-    socket = io("http://localhost:3001");
+    if(isShared){
+      socket = io("http://localhost:3001");
 
-    socket.on("receiveStroke", (data) => {
-      onStrokeReceived(data);
+      socket.on("receiveStroke", (data) => {
+        console.log("test");
+        onStrokeReceived(data);
     });
+    }
   };
+
+
+  const prepareCanvas = async () => {
+    console.log(location);
+    var data = await axios.post('http://localhost:3001/graphql', {
+      query: `{
+        getCanvasById(_id: "${location.state.identifier}"){
+          title
+          creator
+          thumbnailPath
+          isShared
+        }
+      }`
+    });
+
+    console.log (data);
+    setisShared(data.data.data.getCanvasById.isShared);
+    setCanvasId(location.state.identifier);
+    // console.log(location.state.identifier);
+
+    var canvasImage = data.data.data.getCanvasById.thumbnailPath;
+
+    if(isShared){
+      console.log("asd");
+      socket.emit('join-room', {id: location.state.identifier});
+    }
+
+    const canvas = canvasRef.current;
+    canvas.width = 1920;
+    canvas.height = 1080;
+    const canvasContext = canvas.getContext("2d");
+    contextRef.current = canvasContext;
+
+
+    if (canvasImage != null || canvasImage != "") {
+      var img = new Image();
+      img.onload = function () {
+        canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.src = canvasImage;
+    }
+
+  };
+
+  useEffect(() => {
+
+
+    prepareCanvas();
+
+    changeStrokeType(DEFAULT);
+
+    makeConnection();
+  }, []);
 
   const onStrokeReceived = (payloadData) => {
     drawing(
@@ -66,7 +129,7 @@ function Canvas() {
   };
 
   const sendStroke = (x0, y0, x1, y1, lStyle, lOpacity, sColour, lWidth) => {
-    if (socket) {
+    if (socket && isShared) {
       let canvasStroke = {
         x0: x0,
         y0: y0,
@@ -77,33 +140,28 @@ function Canvas() {
         strokeColour: sColour,
         lineWidth: lWidth,
       };
+      
 
-      socket.emit("sendStroke", canvasStroke);
+      socket.emit("sendStroke", {canvasStroke: canvasStroke, id: canvasId});
+
     }
   };
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    canvas.width = 1920;
-    canvas.height = 1080;
-    const canvasContext = canvas.getContext("2d");
-    contextRef.current = canvasContext;
-
-    changeStrokeType(DEFAULT);
-
-    if (!localStorage.getItem("test")) {
-      localStorage.setItem("test", JSON.stringify({ t: "" }));
-    } else {
-      console.log(JSON.parse(localStorage.getItem("test")).t);
-      var img = new Image();
-      img.onload = function () {
-        canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
-      img.src = JSON.parse(localStorage.getItem("test")).t;
-    }
-
-    makeConnection();
-  }, []);
+  const saveCanvas = async () => {
+    await axios.post('http://localhost:3001/graphql', {
+      query: `mutation{
+        updateCanvasById(input: {
+          _id: "${canvasId}",
+          thumbnailPath: "${document.getElementById("main-canvas").toDataURL("image/png", 0.5)}"})
+    }`
+    },
+      { withCredentials: true },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  }
 
   const beginDraw = (e) => {
     currentX = e.pageX;
@@ -114,13 +172,8 @@ function Canvas() {
   const endDraw = (e) => {
     if (isDrawing) {
       drawBrush(e);
+      saveCanvas();
       setIsDrawing(false);
-      localStorage.setItem(
-        "test",
-        JSON.stringify({
-          t: document.getElementById("main-canvas").toDataURL(),
-        })
-      );
     }
   };
 
@@ -211,10 +264,9 @@ function Canvas() {
     canvasContext.lineWidth = lWidth;
     contextRef.current.lineTo(x1, y1);
     contextRef.current.stroke();
-    console.log("test");
     contextRef.current.closePath();
 
-    if (toSend) {
+    if (toSend && isShared) {
       sendStroke(x0, y0, x1, y1, lStyle, lOpacity, sColour, lWidth);
     }
   };
@@ -247,10 +299,20 @@ function Canvas() {
     }
   };
 
-  const displayStrokeSize = () => {};
+  // const history = useHistory();
+  const history = createBrowserHistory({
+    forceRefresh: true
+  });
+  
+  function exitCanvas() {
+
+    history.push("/galleries");
+  }
 
   return (
     <div>
+      <div id="exit-button" onClick={exitCanvas}>
+      </div>
       <div id="toolbar-container">
         <ColorPicker
           setStrokeColour={setStrokeColour}
@@ -285,7 +347,7 @@ function Canvas() {
           </div>
         </div>
       </div>
-      <Chat />
+      {/* <Chat /> */}
       <canvas
         id="main-canvas"
         ref={canvasRef}

@@ -28,15 +28,18 @@ app.use(cors(corsOptions));
 app.use(session({
     secret: 'thisisasecret',
     resave: false,
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
     saveUninitialized: true
 }));
 
 const saltedRounds = 10;
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: '25mb', extended: false }));
+app.use(bodyParser.json({limit: '25mb'}));
 
-app.use(express.static('../frontend'));
+app.use(express.static('/frontend'));
 
 app.use(function (req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -282,10 +285,19 @@ dbo.connectToServer(function (err) {
         else console.log("HTTP server on http://localhost:%s", PORT);
     });
 
-    io.on('connection', (socket) => {
+    io.on('connection', async (socket) => {
+
+        socket.on('join-room', (data) => {
+            console.log("its here");
+            console.log(data);
+            socket.join(data.id);
+        });
 
         socket.on('sendStroke', (data) => {
-            socket.broadcast.emit('receiveStroke', data);
+            console.log(data.canvasStroke);
+            socket.in(data.id).emit('receiveStroke', data.canvasStroke);
+            // console.log("\n\n\n\n\n\n");
+            // socket.to(data.id).emit('receiveStroke', data);
         });
     });
 });
