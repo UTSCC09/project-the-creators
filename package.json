@@ -1,37 +1,59 @@
 {
-  "name": "envisionit-backend",
-  "version": "1.0.0",
-  "description": "Backend for Envisionit app",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/UTSCC09/project-the-creators.git"
-  },
-  "author": "the-creators",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/UTSCC09/project-the-creators/issues"
-  },
-  "homepage": "https://github.com/UTSCC09/project-the-creators#readme",
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "body-parser": "^1.19.2",
-    "cookie": "^0.4.2",
-    "cors": "^2.8.5",
-    "express": "^4.17.3",
-    "express-graphql": "^0.12.0",
-    "express-session": "^1.17.2",
-    "file-system": "^2.2.2",
-    "fs": "^0.0.1-security",
-    "graphql": "^16.3.0",
-    "mongodb": "^4.4.1",
-    "multer": "^1.4.4",
-    "nodemon": "^2.0.15",
-    "path": "^0.12.7",
-    "socket.io": "^4.4.1"
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.5.3",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.4",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.26.1",
+    "bootstrap": "^5.1.3",
+    "net": "^1.0.2",
+    "node-env-run": "^4.0.2",
+    "npm-run-all": "^4.1.5",
+    "react": "^17.0.2",
+    "react-bootstrap": "^2.2.1",
+    "react-color": "^2.19.3",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.19.5",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "5.0.0",
+    "run-p": "^0.0.0",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
+    "sockjs-client": "^1.6.0",
+    "stomp": "^0.1.1",
+    "stompjs": "^2.3.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "proxy": "http://localhost:3001",
+    "server": "node-env-run backend --exec nodemon",
+    "dev": "run-p server start"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

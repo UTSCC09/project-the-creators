@@ -1,0 +1,4 @@
+backend/db/data
+db/log
+.idea
+*.bat
