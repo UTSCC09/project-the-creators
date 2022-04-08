@@ -47,6 +47,7 @@ function Canvas() {
   const [isPencil, setIsPencil] = useState(false);
   const [hue, setHue] = useState(0);
   const [isLocal, setIsLocal] = useState(false);
+  const [canvasId, setCanvasId] = useState("");
   
 
   const makeConnection = () => {
@@ -61,24 +62,27 @@ function Canvas() {
 
 
   const prepareCanvas = async () => {
+    console.log(location);
     var data = await axios.post('http://localhost:3001/graphql', {
       query: `{
-        getCanvas(
-          creator: "${location.state.creator}", 
-          title: "${location.state.title}") {
-          _id
+        getCanvasById(_id: "${location.state.identifier}"){
+          title
+          creator
           thumbnailPath
           isShared
         }
       }`
     });
 
-    setIsLocal(data.data.data.getCanvas.isShared);
+    console.log (data);
+    setIsLocal(data.data.data.getCanvasById.isShared);
+    setCanvasId(location.state.identifier);
 
-    var canvasId = data.data.data.getCanvas._id;
-    var canvasImage = data.data.data.getCanvas.thumbnailPath;
+    var canvasImage = data.data.data.getCanvasById.thumbnailPath;
 
-    // socket.emit('join-room', canvasId);
+    if(!isLocal){
+      socket.emit('join-room', canvasId);
+    }
 
     const canvas = canvasRef.current;
     canvas.width = 1920;
@@ -140,11 +144,11 @@ function Canvas() {
 
   const saveCanvas = async () => {
     await axios.post('http://localhost:3001/graphql', {
-      query: `mutation {
-        updateCanvas(input: {title: "${location.state.title}", thumbnailPath:"${document.getElementById("main-canvas").toDataURL("image/png", 0.5)}"}){
-          title
-        }
-      }`
+      query: `mutation{
+        updateCanvasById(input: {
+          _id: "${canvasId}",
+          thumbnailPath: "${document.getElementById("main-canvas").toDataURL("image/png", 0.5)}"})
+    }`
     },
       { withCredentials: true },
       {

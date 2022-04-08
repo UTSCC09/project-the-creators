@@ -20,7 +20,6 @@ function ColorPicker({setStrokeColour, setLineOpacity}) {
 
     const changeColor = (color) => {
         setColorState({...colorState, "color": color.rgb, "colorHex": color.hex});
-        console.log(colorState.colorHex);
         document.getElementById("color-picker-button").style.background = colorState.colorHex;
         setStrokeColour(colorState.colorHex);
         setLineOpacity(colorState.color.a);

@@ -118,7 +118,7 @@ app.post('/auth/signup/', function (req, res, next) {
     });
 });
 
-app.post('/signin/', function (req, res, next) {
+app.post('/auth/signin/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     const username = req.body.username;
     const password = req.body.password;
