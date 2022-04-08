@@ -20,7 +20,7 @@ module.exports = buildSchema(`
   }
 
   type User {
-    id: ID!
+    _id: ID!
     username: String!
     password: String!
     email: String!
@@ -50,6 +50,7 @@ module.exports = buildSchema(`
   }
 
   input UpdateUserInput {
+    username: String!
     email: String
     firstName: String
     lastName: String

@@ -21,13 +21,13 @@ module.exports = {
       return context.repository.user.createUser(args.input.username, args.input.password, args.input.email, args.input.firstName, args.input.lastName, args.input.city, args.input.phone);
     },
     updateUser: function(args, context) {
-      return context.repository.user.updateUser(context.user, args.input.email, args.input.firstName, args.input.lastName, args.input.city, args.input.phone);
+      return context.repository.user.updateUser(args.input.username, args.input.email, args.input.firstName, args.input.lastName, args.input.city, args.input.phone, context.user);
     },
     createCanvas: function(args, context) {
-      return context.repository.canvas.createCanvas(context.user, args.input.title, args.input.isShared);
+      return context.repository.canvas.createCanvas(args.input.username, args.input.title, args.input.isShared, context.user);
     },
     updateCanvas: function(args, context) {
-      return context.repository.canvas.updateCanvas(context.user, args.input.title, args.input.thumbnailPath, args.input.isShared, args.input.collaborators);
+      return context.repository.canvas.updateCanvas(args.input.username, args.input.title, args.input.thumbnailPath, args.input.isShared, args.input.collaborators, context.user);
     },
     updateCanvasById: function(args, context) {
       return context.repository.canvas.updateCanvasById(args.input._id, args.input.thumbnailPath);

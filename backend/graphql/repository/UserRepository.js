@@ -27,7 +27,7 @@ module.exports = class UserRepository {
     async createUser(username, password, email, firstName, lastName, city, phone) {
         try {
             const dbConnect = dbo.getDb();
-            let result = await dbConnect.collection('users').findOne({creator: creator, title: title, isShared: isShared});
+            let result = await dbConnect.collection('users').findOne({username: username});
             // console.log(result)
             if (!result) {
                 const userDoc = new User(username, password, email, firstName, lastName, city, phone);
@@ -42,10 +42,15 @@ module.exports = class UserRepository {
         }
     }
 
-    async updateUser(currentUser, email, firstName, lastName, city, phone) {
+    async updateUser(username, email, firstName, lastName, city, phone, currentUser) {
         try {
+            if (username !== currentUser)
+                throw new Error("Cannot update another user's profile")
             const dbConnect = dbo.getDb();
-            let result = await dbConnect.collection('users').findOne({username: currentUser});
+            let result = await dbConnect.collection('users').findOne({username: username});
+            
+            console.log(result._id.toString())
+
             if (result) {
                 const updated = new User(result.username, result.password, email || result.email, firstName || result.firstName, lastName || result.lastName, city || result.city, phone || result.phone);
                 const updateDoc = { $set: updated };

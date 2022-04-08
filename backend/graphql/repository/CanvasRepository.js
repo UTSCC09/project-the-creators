@@ -55,8 +55,10 @@ module.exports = class CanvasRepository {
         }        
     }
 
-    async createCanvas(creator, title, isShared) {
+    async createCanvas(creator, title, isShared, currentUser) {
         try {
+            if (creator !== currentUser)
+                throw new Error("Cannot create canvas on another user's profile")
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('canvases').findOne({creator: creator, title: title, isShared: isShared});
             // console.log(result)
@@ -73,11 +75,13 @@ module.exports = class CanvasRepository {
         }
     }
 
-    async updateCanvas(creator, title, thumbnail, isShared, collaborators) {
+    async updateCanvas(creator, title, thumbnail, isShared, collaborators, currentUser) {
         try {
+            if (creator !== currentUser)
+                throw new Error("Cannot update another user's canvas")
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('canvases').findOne({creator: creator, title: title, isShared: isShared});
-            // console.log(result)
+             console.log(result)
             if (result) {
                 const updated = new Canvas(title, creator, isShared || result.isShared, thumbnail || result.thumbnail, collaborators || result.collaborators);
                 const updateDoc = { $set: updated };
