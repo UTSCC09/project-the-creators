@@ -13,7 +13,6 @@ const Galleries = () => {
 
   const submitURL = async () => {
     var inputVal = document.getElementById("canvas-url").value;
-    console.log(inputVal);
     if(inputVal){
 
       const data = await axios.put(inputVal, {
