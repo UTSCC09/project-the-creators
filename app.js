@@ -40,7 +40,7 @@ const saltedRounds = 10;
 
 app.use(bodyParser.urlencoded({ limit: '25mb', extended: false }));
 app.use(bodyParser.json({limit: '25mb'}));
-app.use(express.static('/frontend/build'));
+app.use(express.static('/frontend/build/index.html'));
 
 app.use(function (req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -274,6 +274,8 @@ const { fstat } = require('fs');
 const { isatty } = require('tty');
 const { Console } = require('console');
 
+const PORT = process.env.PORT|| 3001;
+
 dbo.connectToServer(function (err) {
     if (err) {
         console.error(err);
@@ -281,9 +283,9 @@ dbo.connectToServer(function (err) {
     }
 
     // start the Express server
-    httpServer.listen(process.env.PORT || 3001, function (err) {
+    httpServer.listen(PORT, function (err) {
         if (err) console.log(err);
-        else console.log("HTTP server on http://localhost:%s", process.env.PORT);
+        else console.log("HTTP server on http://localhost:%s", PORT);
     });
 
     io.on('connection', async (socket) => {
