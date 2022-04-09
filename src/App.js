@@ -19,7 +19,7 @@ function App() {
             <Route exact path="/signin" component={Signin} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/galleries" component={Galleries} />
-            <Route exact path="/markotto" component={Userprofile} />
+            <Route exact path="/userprofile" component={Userprofile} />
             <Route exact path="/Canvas" component={canvas} />
           </Switch>
         </div>

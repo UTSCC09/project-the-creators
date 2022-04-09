@@ -13,11 +13,13 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Header from "../components/Header";
-import { baseUrl } from "../lib/constants"
+import { baseUrl } from "../lib/constants";
+import { authUrl, apiUrl } from "../lib/constants.js";
 
 const UserProfile = () => {
   const [status, setStatus] = useState({ isLoggedIn: false, user: null });
   const [changed, setchanged] = useState(false);
+  const [info, setinfo] = useState({ email: null, phone: null, city: null });
   const [hasError, setHasError] = useState({
     duplicate: false,
     missInfo: false,
@@ -30,10 +32,43 @@ const UserProfile = () => {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    axios
-      .get("/api/auth/user")
-      .then((res) => setStatus(res.data))
+  useEffect(async () => {
+    await axios
+      .get(authUrl + "/currentUser", { withCredentials: true })
+      .then((res) => {
+        if (res.data !== "") {
+          setStatus({ isLoggedIn: true, user: res.data });
+          axios
+            .post(
+              "http://localhost:3001/graphql",
+              {
+                query: `query {
+          getUser(username: "${res.data}"
+          ) {
+            email
+            phone
+            city
+          }
+        }`,
+              },
+              { withCredentials: true },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((res) => {
+              setinfo({
+                email: res.data.data.getUser.email,
+                phone: res.data.data.getUser.phone,
+                city: res.data.data.getUser.city,
+              });
+            });
+        } else {
+          setStatus({ isLoggedIn: false, user: null });
+        }
+      })
       .catch();
   }, []);
 
@@ -41,14 +76,32 @@ const UserProfile = () => {
     changed && (window.location = "/userprofile");
   }, [changed]);
 
+  console.log(status);
+
   const Savechanges = async (data) => {
     await axios
-      .put(`/api/users/${status.user.uid}`, {
-        email: data.email,
-        password: data.password,
-        phone_number: data.phonenumber,
-        city: data.location,
-      })
+      .post(
+        "http://localhost:3001/graphql",
+        {
+          query: `mutation {
+          updateUser(input: {
+            email: "${data.email}"
+            firstName: "909"
+            lastName: "909"
+            city: "${data.location}"
+            phone: "${data.phonenumber}"
+          }) {
+            username
+          }
+        }`,
+        },
+        { withCredentials: true },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then(() => {
         setchanged(true);
       })
@@ -82,7 +135,7 @@ const UserProfile = () => {
               </Form.Label>
               <Col className="editbutton">
                 <Form.Control
-                  placeholder="123@123.com"
+                  placeholder={info.email}
                   {...register("email", {
                     pattern: {
                       value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
@@ -107,7 +160,7 @@ const UserProfile = () => {
               <Col className="editbutton">
                 <Form.Control
                   type="password"
-                  placeholder="mark123"
+                  placeholder="..."
                   {...register("password")}
                 />
               </Col>
@@ -122,7 +175,7 @@ const UserProfile = () => {
               <Col className="editbutton">
                 <Form.Control
                   type="text"
-                  placeholder="111222333"
+                  placeholder={info.phone}
                   {...register("phonenumber", {
                     pattern: {
                       value: /^[0-9]*$/,
@@ -155,7 +208,7 @@ const UserProfile = () => {
               <Col className="editbutton">
                 <Form.Control
                   type="text"
-                  placeholder="Toronto"
+                  placeholder={info.city}
                   {...register("location")}
                 />
               </Col>
