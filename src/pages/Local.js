@@ -57,7 +57,6 @@ const Local = () => {
     var index = 0;
     document.querySelectorAll('.local-user-gallery-card').forEach(item => {
       var id = canvases[index]._id;
-      console.log(id);
       item.addEventListener('click', event => {
         history.push("/canvas", { identifier: id });
       });
@@ -86,10 +85,8 @@ const Local = () => {
       if(ret){
         history.push("/canvas", { identifier: ret.data.data.createCanvas._id});
       }
-    } else {
-      // console.log("test");
     }
-  }
+  };
 
   const history = useHistory();
 

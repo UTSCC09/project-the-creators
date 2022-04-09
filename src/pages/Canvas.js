@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import "../styles/Canvas.css"
+import "../styles/Canvas.css";
 import ColorPicker from "../components/ColorPicker";
 import StrokeSizeSelector from "../components/StrokeSizeSelector";
-import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
 // Credits to help create the collaborative white board
@@ -30,8 +29,6 @@ var ERASER = 4;
 function Canvas() {
 
   const location = useLocation();
-  // window.history.replaceState({}, document.title);
-
   const canvasRef = useRef();
   const contextRef = useRef();
 
@@ -39,10 +36,9 @@ function Canvas() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokeColour, setStrokeColour] = useState("black");
   const [lineWidth, setLineWidth] = useState(10);
-  const [lineStyle, setLineStyle] = useState("round");
+  const [lineStyle] = useState("round");
   const [lineOpacity, setLineOpacity] = useState(1);
   const [isGradientBrush, setIsGradientBrush] = useState(false);
-  const [isDefaultBrush, setIsDefaultBrush] = useState(true);
   const [isEraser, setIsEraser] = useState(false);
   const [isPencil, setIsPencil] = useState(false);
   const [hue, setHue] = useState(0);
@@ -55,7 +51,6 @@ function Canvas() {
       socket = io("http://localhost:3001");
 
       socket.on("receiveStroke", (data) => {
-        console.log("test");
         onStrokeReceived(data);
     });
     }
@@ -63,7 +58,6 @@ function Canvas() {
 
 
   const prepareCanvas = async () => {
-    console.log(location);
     var data = await axios.post('http://localhost:3001/graphql', {
       query: `{
         getCanvasById(_id: "${location.state.identifier}"){
@@ -75,15 +69,12 @@ function Canvas() {
       }`
     });
 
-    console.log (data);
     setisShared(data.data.data.getCanvasById.isShared);
     setCanvasId(location.state.identifier);
-    // console.log(location.state.identifier);
 
     var canvasImage = data.data.data.getCanvasById.thumbnailPath;
 
     if(isShared){
-      console.log("asd");
       socket.emit('join-room', {id: location.state.identifier});
     }
 
@@ -94,7 +85,7 @@ function Canvas() {
     contextRef.current = canvasContext;
 
 
-    if (canvasImage != null || canvasImage != "") {
+    if (canvasImage !== null || canvasImage !== "") {
       var img = new Image();
       img.onload = function () {
         canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -112,7 +103,7 @@ function Canvas() {
     changeStrokeType(DEFAULT);
 
     makeConnection();
-  }, []);
+  });
 
   const onStrokeReceived = (payloadData) => {
     drawing(
@@ -161,7 +152,7 @@ function Canvas() {
           'Content-Type': 'application/json'
         }
       });
-  }
+  };
 
   const beginDraw = (e) => {
     currentX = e.pageX;
@@ -259,8 +250,6 @@ function Canvas() {
     canvasContext.lineCap = lStyle;
     canvasContext.globalAlpha = lOpacity;
     canvasContext.strokeStyle = sColour;
-    // canvasContext.shadowBlur = 100;
-    // canvasContext.shadowColor = sColour;
     canvasContext.lineWidth = lWidth;
     contextRef.current.lineTo(x1, y1);
     contextRef.current.stroke();
@@ -272,7 +261,6 @@ function Canvas() {
   };
 
   const changeStrokeType = (strokeType) => {
-    setIsDefaultBrush(false);
     setIsPencil(false);
     setIsGradientBrush(false);
     setIsEraser(false);
@@ -280,26 +268,24 @@ function Canvas() {
     document.getElementById("pencil-brush").style.backgroundSize = "";
     document.getElementById("gradient-brush").style.backgroundSize = "";
     document.getElementById("eraser-button").style.backgroundSize = "";
-    if (strokeType == DEFAULT) {
-      setIsDefaultBrush(true);
+    if (strokeType === DEFAULT) {
       document.getElementById("default-brush").style.backgroundSize =
         "100% 5px, auto";
-    } else if (strokeType == PENCIL) {
+    } else if (strokeType === PENCIL) {
       setIsPencil(true);
       document.getElementById("pencil-brush").style.backgroundSize =
         "100% 5px, auto";
-    } else if (strokeType == GRADIENT) {
+    } else if (strokeType === GRADIENT) {
       setIsGradientBrush(true);
       document.getElementById("gradient-brush").style.backgroundSize =
         "100% 5px, auto";
-    } else if (strokeType == ERASER) {
+    } else if (strokeType === ERASER) {
       setIsEraser(true);
       document.getElementById("eraser-button").style.backgroundSize =
         "100% 5px, auto";
     }
   };
 
-  // const history = useHistory();
   const history = createBrowserHistory({
     forceRefresh: true
   });
@@ -311,43 +297,36 @@ function Canvas() {
 
   return (
     <div>
-      <div id="exit-button" onClick={exitCanvas}>
-      </div>
+      <div id="exit-button" onClick={exitCanvas}/>
       <div id="toolbar-container">
         <ColorPicker
           setStrokeColour={setStrokeColour}
           setLineOpacity={setLineOpacity}
         />
         <StrokeSizeSelector setLineWidth={setLineWidth} lineWidth={lineWidth} />
-        {/* <p>Tools</p> */}
         <div id="toolbar-tools">
           <div
             id="default-brush"
             className="canvas-tools"
             onClick={() => changeStrokeType(DEFAULT)}
-          ></div>
+          />
           <div
             id="pencil-brush"
             className="canvas-tools"
             onClick={() => changeStrokeType(PENCIL)}
-          ></div>
+          />
           <div
             id="gradient-brush"
             className="canvas-tools"
             onClick={() => changeStrokeType(GRADIENT)}
-          >
-            Gradient
-          </div>
+          />
           <div
             id="eraser-button"
             className="canvas-tools"
             onClick={() => changeStrokeType(ERASER)}
-          >
-            Eraser
-          </div>
+          />
         </div>
       </div>
-      {/* <Chat /> */}
       <canvas
         id="main-canvas"
         ref={canvasRef}

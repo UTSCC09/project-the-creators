@@ -6,7 +6,7 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <img src={logo} className="home-pic" />
+      <img src={logo} alt="Homepage Pic" className="home-pic" />
     </>
   );
 };

@@ -4,7 +4,7 @@ import { Form, Button, Row, Col, Alert } from "react-bootstrap";
 import "../styles/Signup.css";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { authUrl, apiUrl } from "../lib/constants.js"
+import { authUrl } from "../lib/constants.js";
 const SignupPage = () => {
   // States
   /* const [user, setUser] = useState({
@@ -33,7 +33,6 @@ const SignupPage = () => {
   } = useForm();
 
   const SignUp = async (data) => {
-    console.log(data);
     await axios
       .post(authUrl + "/signup", {
         username: data.username,

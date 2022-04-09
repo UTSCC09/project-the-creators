@@ -1,11 +1,5 @@
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import canvas from "../pages/Canvas";
-import { apiUrl, authUrl } from "../lib/constants.js";
-import React, { useState, useEffect } from "react";
+import { authUrl } from "../lib/constants.js";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -41,7 +35,6 @@ const Shared = () => {
       });
 
     var canvases = data.data.data.getAllCanvases;
-    console.log(canvases);
 
     let innerElmnt = ``;
 
@@ -86,10 +79,8 @@ const Shared = () => {
       if(ret){
         history.push("/canvas", { identifier: ret.data.data.createCanvas._id});
       }
-    } else {
-      // console.log("test");
     }
-  }
+  };
 
   const history = useHistory();
  
@@ -106,7 +97,7 @@ const Shared = () => {
 
   useEffect(() => {
     setupGallery();
-  }, []);
+  });
 
   return (
     <div id='user-shared-gallery' className='user-gallery'>

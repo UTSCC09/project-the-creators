@@ -76,8 +76,6 @@ const UserProfile = () => {
     changed && (window.location = "/userprofile");
   }, [changed]);
 
-  console.log(status);
-
   const Savechanges = async (data) => {
     await axios
       .post(
