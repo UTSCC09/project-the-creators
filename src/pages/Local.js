@@ -13,13 +13,8 @@ let currentUser = "";
 
 const Local = () => {
   const setupGallery = async () => {
-    await axios
-      .get(authUrl + "/currentUser", { withCredentials: true })
-      .then((res) => {
-        if (res.data !== "") {
-          currentUser = res.data;
-        }
-      });
+     currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+
     const data = await axios.post('http://localhost:3001/graphql', {
       query: `{
         getAllCanvases(isShared: false){

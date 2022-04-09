@@ -14,13 +14,8 @@ let currentUser = "";
 const Shared = () => {
 
   const setupGallery = async () => {
-    await axios
-      .get(authUrl + "/currentUser", { withCredentials: true })
-      .then((res) => {
-        if (res.data !== "") {
-          currentUser = res.data;
-        }
-      });
+    const currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+
       const data = await axios.post('http://localhost:3001/graphql', {
         query: `{
           getAllCanvases(isShared: true){
@@ -33,7 +28,6 @@ const Shared = () => {
         `,
         variables: null
       },
-      { withCredentials: true },
       {
         headers: {
           'Content-Type': 'application/json'
@@ -52,7 +46,7 @@ const Shared = () => {
                           <div class='user-gallery-card-name'>
                             ${canvases[i].title}
                           </div>
-                        </div>`;
+                        `;
     }
     document.getElementById('user-shared-gallery').insertAdjacentHTML('afterbegin', innerElmnt);
 
@@ -72,12 +66,11 @@ const Shared = () => {
     if(inputVal){
       var ret = await axios.post('http://localhost:3001/graphql', {
       query: `mutation {
-        createCanvas(input: {title: "${inputVal}", isShared: true}) {
+        createCanvas(input: {username: "${currentUser}" title: "${inputVal}", isShared: true}) {
           _id
         }
       }`
     },
-      { withCredentials: true },
       {
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +80,6 @@ const Shared = () => {
         history.push("/canvas", { identifier: ret.data.data.createCanvas._id});
       }
     } else {
-      // console.log("test");
     }
   }
 

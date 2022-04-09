@@ -59,6 +59,7 @@ module.exports = buildSchema(`
   }
 
   input NewCanvasInput {
+    username: String!
     title: String!
     isShared: Boolean!
   }

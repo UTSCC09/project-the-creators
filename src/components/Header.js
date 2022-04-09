@@ -15,15 +15,15 @@ const Header = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(authUrl + "/currentUser", { withCredentials: true })
-      .then((res) => {
-        if (res.data !== "") {
-          setStatus({ isLoggedIn: true, user: res.data });
-        } else {
-          setStatus({ isLoggedIn: false, user: null });
-        }
-      });
+    const user = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    if (user !== "") {
+      //console.log("here");
+      setStatus({ isLoggedIn: true, user: user });
+      //console.log(status);
+    } else {
+      setStatus({ isLoggedIn: false, user: null });
+    }
+
   }, []);
 
   return (

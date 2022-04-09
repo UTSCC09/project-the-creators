@@ -154,10 +154,6 @@ app.get('/auth/signout/', function (req, res, next) {
     });
 });
 
-app.get('/auth/currentUser/', isAuthenticated, function (req, res, next) {
-    res.json(req.username);
-});
-
 /// Create
 app.post('/api/canvas', isAuthenticated, function (req, res, next) {
     const dbConnect = dbo.getDb();
