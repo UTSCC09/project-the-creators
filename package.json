@@ -37,8 +37,7 @@
     "eject": "react-scripts eject",
     "proxy": "http://localhost:3001",
     "server": "node-env-run backend",
-    "dev": "run-p server start",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
+    "dev": "run-p server start"
   },
   "engines": {
     "node": "16.14.0"
