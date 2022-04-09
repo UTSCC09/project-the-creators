@@ -4,14 +4,14 @@
   "description": "Backend for Envisionit app",
   "main": "app.js",
   "engines": {
-    "node": "16.14.0"
+    "node": "16.x"
   },
   "scripts": {
     "start": "node app.js",
     "heroku-postbuild": "cd frontend && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd frontend && npm run start",
-    "dev": "run-p start client"
+    "dev": "run-p start cligit ent"
   },
   "repository": {
     "type": "git",
