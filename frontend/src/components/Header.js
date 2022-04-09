@@ -18,12 +18,8 @@ const Header = () => {
     axios
       .get(authUrl + "/currentUser", { withCredentials: true })
       .then((res) => {
-        //console.log(res.data);
-        //console.log(status);
         if (res.data !== "") {
-          //console.log("here");
           setStatus({ isLoggedIn: true, user: res.data });
-          //console.log(status);
         } else {
           setStatus({ isLoggedIn: false, user: null });
         }
@@ -44,9 +40,14 @@ const Header = () => {
           <Navbar.Collapse className="justify-content-end">
             {status.isLoggedIn && (
               <Navbar.Text>
-                Signed in as: <a href="/markotto">{status.user}</a>
+                Signed in as: <a href="/userprofile">{status.user}</a>
               </Navbar.Text>
             )}
+            <Nav>
+              {status.isLoggedIn && (
+                <Nav.Link href="/userprofile">Profile</Nav.Link>
+              )}
+            </Nav>
             {status.isLoggedIn && (
               <Nav.Link onClick={signout}>Sign out</Nav.Link>
             )}

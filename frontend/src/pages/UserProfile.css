@@ -21,9 +21,10 @@
 }
 
 .editaccountformwidth {
+  position: absolute;
   width: 30rem;
   border: 3px black solid;
   border-radius: 10px;
-  margin-top: 3%;
+  margin-top: 6%;
   padding: 12px;
 }
