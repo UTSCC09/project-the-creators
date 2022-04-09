@@ -273,8 +273,6 @@ const io = require('socket.io')(httpServer, {
 const { fstat } = require('fs');
 const { isatty } = require('tty');
 const { Console } = require('console');
-const PORT = 3001;
-
 
 dbo.connectToServer(function (err) {
     if (err) {
@@ -283,7 +281,7 @@ dbo.connectToServer(function (err) {
     }
 
     // start the Express server
-    httpServer.listen(PORT, function (err) {
+    httpServer.listen(process.env.PORT || 3001, function (err) {
         if (err) console.log(err);
         else console.log("HTTP server on http://localhost:%s", PORT);
     });
