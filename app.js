@@ -279,7 +279,6 @@ const io = require('socket.io')(httpServer, {
 const { fstat } = require('fs');
 const { isatty } = require('tty');
 const { Console } = require('console');
-const { frontendUrl } = require('./constants');
 const PORT = process.env.PORT || 3001;
 
 
