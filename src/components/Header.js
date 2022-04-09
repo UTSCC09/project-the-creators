@@ -36,6 +36,9 @@ const Header = () => {
               <Nav.Link href="/galleries">Galleries</Nav.Link>
             )}
           </Nav>
+          <Nav className="me-auto">
+              <Nav.Link href="/galleries">Galleries</Nav.Link>
+          </Nav>
 
           <Navbar.Collapse className="justify-content-end">
             {status.isLoggedIn && (

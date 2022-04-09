@@ -8,6 +8,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Userprofile from "./pages/UserProfile";
 import canvas from "./pages/Canvas";
+import credits from "./pages/Credits"
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route exact path="/galleries" component={Galleries} />
             <Route exact path="/userprofile" component={Userprofile} />
             <Route exact path="/Canvas" component={canvas} />
+            <Route exact path="/Credits" component={credits} />
           </Switch>
         </div>
       </Router>

@@ -9,7 +9,7 @@ let currentUser = "";
 const Shared = () => {
 
   const setupGallery = async () => {
-    const currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
 
       const data = await axios.post('http://localhost:3001/graphql', {
         query: `{
@@ -23,6 +23,7 @@ const Shared = () => {
         `,
         variables: null
       },
+      { withCredentials: true },
       {
         headers: {
           'Content-Type': 'application/json'
@@ -40,7 +41,7 @@ const Shared = () => {
                           <div class='user-gallery-card-name'>
                             ${canvases[i].title}
                           </div>
-                        `;
+                      </div>`;
     }
     document.getElementById('user-shared-gallery').insertAdjacentHTML('afterbegin', innerElmnt);
 
@@ -65,6 +66,7 @@ const Shared = () => {
         }
       }`
     },
+      { withCredentials: true },
       {
         headers: {
           'Content-Type': 'application/json'
