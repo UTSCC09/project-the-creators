@@ -41,7 +41,7 @@ const saltedRounds = 10;
 app.use(bodyParser.urlencoded({ limit: '25mb', extended: false }));
 app.use(bodyParser.json({limit: '25mb'}));
 
-app.use(express.static('/frontend'));
+app.use(express.static(path.resolve(__dirname, "./frontend/build")));
 
 app.use(function (req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
