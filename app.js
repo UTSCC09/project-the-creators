@@ -283,7 +283,7 @@ dbo.connectToServer(function (err) {
     // start the Express server
     httpServer.listen(process.env.PORT || 3001, function (err) {
         if (err) console.log(err);
-        else console.log("HTTP server on http://localhost:%s", PORT);
+        else console.log("HTTP server on http://localhost:%s", process.env.PORT);
     });
 
     io.on('connection', async (socket) => {
