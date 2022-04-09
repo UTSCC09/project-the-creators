@@ -322,9 +322,11 @@ function Canvas() {
   return (
     <div>
       <div id="exit-button" onClick={exitCanvas}/>
-      <div id="invite-link-button" onClick={getInviteLink}>
-        Get Link
-      </div>
+      { isShared ? 
+          <div id="invite-link-button" onClick={getInviteLink}>
+            Get Link
+          </div>
+            : null }
       <div id="toolbar-container">
         <ColorPicker
           setStrokeColour={setStrokeColour}
