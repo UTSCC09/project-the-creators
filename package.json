@@ -37,7 +37,8 @@
     "eject": "react-scripts eject",
     "proxy": "http://localhost:3001",
     "server": "node-env-run backend",
-    "dev": "run-p server start"
+    "dev": "run-p server start",
+    "postinstall": "npm install --prefix ./backend"
   },
   "engines": {
     "node": "16.14.0"
