@@ -47,7 +47,7 @@ const SignupPage = () => {
       .then(() => {
         setHasError({ missInfo: false });
         setSucc(true);
-        window.location = "/galleries";
+        window.location = "/";
       })
       .catch((err) => {
         if (err.response.status === 400) {
