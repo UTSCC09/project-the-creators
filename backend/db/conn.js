@@ -1,7 +1,8 @@
 // TODO: Credit https://www.mongodb.com/languages/express-mongodb-rest-api-tutorial
 const { MongoClient } = require("mongodb");
-//const connectionString = process.env.ATLAS_URI;
-const connectionString = 'mongodb://localhost:27017/'
+const dotenv = require('dotenv');
+dotenv.config();
+const connectionString = "mongodb+srv://" + process.env.MONGODB_USERNAME + ":" + process.env.MONGODB_PASSWORD + "@envisionit-db.wm8c5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(connectionString, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
