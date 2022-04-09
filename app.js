@@ -43,6 +43,10 @@ app.use(bodyParser.json({limit: '25mb'}));
 
 app.use(express.static(path.resolve(__dirname, "./frontend/build")));
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/build/index.html'));
+  });
+
 app.use(function (req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     let cookies = cookie.parse(req.headers.cookie || '');
