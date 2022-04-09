@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import "../styles/Gallery.css";
 import { useHistory } from "react-router-dom";
+import { graphqlUrl } from "../lib/constants";
 
 let currentUser = "";
 
@@ -11,7 +12,7 @@ const Shared = () => {
   const setupGallery = async () => {
     currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
 
-      const data = await axios.post('http://localhost:3001/graphql', {
+      const data = await axios.post(graphqlUrl, {
         query: `{
           getAllCanvases(isShared: true){
             _id
@@ -59,7 +60,7 @@ const Shared = () => {
 
     var inputVal = document.getElementById('shared-canvas-title').value;
     if(inputVal){
-      var ret = await axios.post('http://localhost:3001/graphql', {
+      var ret = await axios.post(graphqlUrl, {
       query: `mutation {
         createCanvas(input: {creator: "${currentUser}", title: "${inputVal}", isShared: true}) {
           _id

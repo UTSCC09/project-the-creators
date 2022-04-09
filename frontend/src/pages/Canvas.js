@@ -6,6 +6,7 @@ import "../styles/Canvas.css";
 import ColorPicker from "../components/ColorPicker";
 import StrokeSizeSelector from "../components/StrokeSizeSelector";
 import { createBrowserHistory } from "history";
+import { graphqlUrl } from "../lib/constants";
 
 // Credits to help create the collaborative white board
 // Credits: https://www.youtube.com/watch?v=FLESHMJ-bI0
@@ -59,7 +60,7 @@ function Canvas() {
 
 
   const prepareCanvas = async () => {
-    var data = await axios.post('http://localhost:3001/graphql', {
+    var data = await axios.post(graphqlUrl, {
       query: `{
         getCanvasById(_id: "${location.state.identifier}"){
           title
@@ -146,7 +147,7 @@ function Canvas() {
   };
 
   const saveCanvas = async () => {
-    await axios.post('http://localhost:3001/graphql', {
+    await axios.post(graphqlUrl, {
       query: `mutation{
         updateCanvasById(input: {
           _id: "${canvasId}",
@@ -305,7 +306,7 @@ function Canvas() {
   const getInviteLink = async () => {
     document.getElementById("invite-link-button").style.background = "#00FF00";
     document.getElementById("invite-link-button").innerHTML = "Link Copied!";
-    var data = await axios.post('http://localhost:3001/graphql', {
+    var data = await axios.post(graphqlUrl, {
       query: `{
         getCollaboratorLink(_id: "${canvasId}", creator: "${canvasCreator}")
       }`

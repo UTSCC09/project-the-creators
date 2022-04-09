@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Header from "../components/Header";
+import { graphqlUrl } from "../lib/constants";
 
 const UserProfile = () => {
   const [status, setStatus] = useState({ isLoggedIn: false, user: null });
@@ -37,7 +38,7 @@ const UserProfile = () => {
       setStatus({ isLoggedIn: true, user: currentUser})
       axios
         .post(
-          "http://localhost:3001/graphql",
+          graphqlUrl,
           {
             query: `query {
       getUser(username: "${currentUser}"
@@ -78,7 +79,7 @@ const UserProfile = () => {
     const currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
     await axios
       .post(
-        "http://localhost:3001/graphql",
+        graphqlUrl,
         {
           query: `mutation {
           updateUser(input: {
