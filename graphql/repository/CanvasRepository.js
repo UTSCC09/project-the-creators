@@ -110,9 +110,7 @@ module.exports = class CanvasRepository {
             console.log(result)
             if (result) {
                 // Gemerate the link that will add the collabortor to the canvas
-                console.log(result._id)
-                const link = frontendUrl + "/canvas/" + result._id;
-                console.log(link)
+                const link = frontendUrl + "canvas/" + result._id;
                 return link;
             }
         } catch (err) {

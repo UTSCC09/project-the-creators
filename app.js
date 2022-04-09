@@ -44,10 +44,6 @@ app.use(bodyParser.json({limit: '25mb'}));
 
 app.use(express.static(path.resolve(__dirname, "./frontend/build")));
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/build/index.html'));
-  });
-
 app.use(function (req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     let cookies = cookie.parse(req.headers.cookie || '');
@@ -91,7 +87,6 @@ const isSameUser = function(req, res, next) {
     if (req.username !== req.params.username) return res.status(401).end("access denied");
     next();
 }
-
 app.post('/auth/signup/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     const username = req.body.username;
@@ -148,16 +143,19 @@ app.post('/auth/signin/', function (req, res, next) {
 });
 
 app.get('/auth/signout/', function (req, res, next) {
+    console.log("destoyed session")
     res.setHeader('Set-Cookie', cookie.serialize('username', '', {
           path : '/', 
           maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
     }));
     // delete session
     req.session.destroy(function(err) {
+        console.log("destoyed session")
         if (err) return res.status(500).end(err);
         res.json(null);
     });
 });
+
 
 /// Create
 app.post('/api/canvas', isAuthenticated, function (req, res, next) {
@@ -268,6 +266,9 @@ app.put('/api/users/:username', isAuthenticated, isSameUser, function (req, res,
 
 /// Delete
 
+app.get('*', (req, res, next) => {
+    res.sendFile(path.join(__dirname, 'frontend/build/index.html'));
+  });
 
 const http = require('http');
 const httpServer = http.createServer(app);
