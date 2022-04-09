@@ -68,6 +68,14 @@ const Credits = () => {
             <li>Also used <a href="https://www.w3schools.com/">W3Schools</a> for a lot of coding/css help. References are linked at the location 
             where the code resides, as comments.</li>
         </ul>
+
+        <h2>Images</h2>
+        <ul>
+        <li>
+            Homepage background Image: <a href='https://www.freepik.com/photos/mountain-water'>Mountain water photo created by liuzishan - www.freepik.com</a>
+        </li>
+           
+        </ul>
     </div>
     </>
   );

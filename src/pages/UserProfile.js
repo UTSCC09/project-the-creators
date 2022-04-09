@@ -5,7 +5,6 @@ import {
   Col,
   Row,
   Alert,
-  Card,
 } from "react-bootstrap";
 import "../styles/UserProfile.css";
 import React from "react";
@@ -13,8 +12,6 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Header from "../components/Header";
-import { baseUrl } from "../lib/constants";
-import { authUrl, apiUrl } from "../lib/constants.js";
 
 const UserProfile = () => {
   const [status, setStatus] = useState({ isLoggedIn: false, user: null });
@@ -32,7 +29,9 @@ const UserProfile = () => {
     formState: { errors },
   } = useForm();
 
-  useEffect(async () => {
+  useEffect(() => {
+
+
     const currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
     if (currentUser !== ""){
       setStatus({ isLoggedIn: true, user: currentUser})
@@ -119,6 +118,7 @@ const UserProfile = () => {
     <>
       <div>
         <Header />
+        {status.isLoggedIn ? (
         <Container className="containercenter">
           <Form
             onSubmit={handleSubmit(Savechanges)}
@@ -229,6 +229,11 @@ const UserProfile = () => {
             </Container>
           </Form>
         </Container>
+
+        ) : (
+          <Alert variant="warning" onClick={()=>{window.location = "/signin"}} style={{ position: "fixed", left: "45%", top: "30%"}}>Please log in first</Alert>
+        )}
+
       </div>
     </>
   );

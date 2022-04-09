@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 import Nav from "react-bootstrap/Nav";
-import { Tab, Tabs, Button } from "react-bootstrap";
+import { Tab, Tabs, Button, Alert } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import Local from "./Local";
 import Shared from "./Shared";
@@ -10,6 +10,8 @@ import { useHistory } from "react-router-dom";
 const Galleries = () => {
 
   const history = useHistory();
+
+  const currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
 
   const submitURL = async () => {
     var inputVal = document.getElementById("canvas-url").value;
@@ -32,8 +34,8 @@ const Galleries = () => {
 
   return (
     <>
-      <Header />
-      <div></div>
+        <Header />
+      {currentUser ? (
       <Container className="pt-5 pb-3">
         <Tabs defaultActiveKey="shared" id="accountPG" className="">
           <Tab eventKey="shared" title="Shared">
@@ -46,6 +48,9 @@ const Galleries = () => {
           </Tab>
         </Tabs>
       </Container>
+      ) : (
+        <Alert variant="warning" onClick={()=>{window.location = "/signin"}} style={{ position: "fixed", left: "45%", top: "30%"}}>Please log in first</Alert>
+      )}
     </>
   );
 };
