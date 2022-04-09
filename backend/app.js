@@ -274,7 +274,7 @@ const io = require('socket.io')(httpServer, {
 const { fstat } = require('fs');
 const { isatty } = require('tty');
 const { Console } = require('console');
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 
 dbo.connectToServer(function (err) {
