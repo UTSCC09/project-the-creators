@@ -13,8 +13,8 @@ import { createBrowserHistory } from "history";
 // Credits: https://github.com/socketio/socket.io/tree/master/examples/whiteboard
 // Credits: https://codepen.io/damyco/pen/vaJwbX
 
-// Credits to help set up websockets using spring boot
-// Credits: https://www.youtube.com/watch?v=o_IjEDAuo8Y
+// Credits for rainbow stroke feature:
+// Credits: https://codepen.io/damyco/pen/vaJwbX
 
 var currentX;
 var currentY;

@@ -37,7 +37,7 @@ const Header = () => {
             )}
           </Nav>
           <Nav className="me-auto">
-              <Nav.Link href="/galleries">Galleries</Nav.Link>
+              <Nav.Link href="/Credits">Credits</Nav.Link>
           </Nav>
 
           <Navbar.Collapse className="justify-content-end">

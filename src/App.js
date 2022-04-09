@@ -8,7 +8,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Userprofile from "./pages/UserProfile";
 import canvas from "./pages/Canvas";
-import credits from "./pages/Credits"
+import credits from "./pages/Credits";
 
 function App() {
   return (
