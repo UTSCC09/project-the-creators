@@ -34,7 +34,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "proxy": "http://localhost:3001"
+    "proxy": "https://envisionit-app.herokuapp.com/"
   },
   "eslintConfig": {
     "extends": [

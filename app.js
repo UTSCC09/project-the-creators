@@ -17,10 +17,11 @@ const root = require('./graphql/root');
 const context = require('./graphql/context');
 const schema = require('./graphql/schema/schema');
 const dbo = require('./db/conn');
+const { frontendUrl } = require('constants');
 
 var corsOptions = {
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: frontendUrl,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
@@ -278,6 +279,7 @@ const io = require('socket.io')(httpServer, {
 const { fstat } = require('fs');
 const { isatty } = require('tty');
 const { Console } = require('console');
+const { frontendUrl } = require('./constants');
 const PORT = process.env.PORT || 3001;
 
 
@@ -290,7 +292,7 @@ dbo.connectToServer(function (err) {
     // start the Express server
     httpServer.listen(PORT, function (err) {
         if (err) console.log(err);
-        else console.log("HTTP server on http://localhost:%s", PORT);
+        else console.log("HTTP server on https://envisionit-app.herokuapp.com/:%s", PORT);
     });
 
     io.on('connection', async (socket) => {

@@ -5,3 +5,4 @@
 export const authUrl = "https://envisionit-app.herokuapp.com/auth"
 export const apiUrl = "https://envisionit-app.herokuapp.com/api"
 export const graphqlUrl = "https://envisionit-app.herokuapp.com/graphql"
+export const socketUrl = "https://envisionit-app.herokuapp.com/"

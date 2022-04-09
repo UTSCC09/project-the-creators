@@ -1,6 +1,6 @@
 const Canvas = require('../models/Canvas');
 const dbo = require('../../db/conn');
-const { baseUrl } = require('../../constants')
+const { frontendUrl } = require('../../constants')
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = class CanvasRepository {
@@ -111,7 +111,7 @@ module.exports = class CanvasRepository {
             if (result) {
                 // Gemerate the link that will add the collabortor to the canvas
                 console.log(result._id)
-                const link = baseUrl + "/canvas/" + result._id;
+                const link = frontendUrl + "/canvas/" + result._id;
                 console.log(link)
                 return link;
             }

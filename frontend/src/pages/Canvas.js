@@ -6,7 +6,7 @@ import "../styles/Canvas.css";
 import ColorPicker from "../components/ColorPicker";
 import StrokeSizeSelector from "../components/StrokeSizeSelector";
 import { createBrowserHistory } from "history";
-import { graphqlUrl } from "../lib/constants";
+import { graphqlUrl, socketUrl } from "../lib/constants";
 
 // Credits to help create the collaborative white board
 // Credits: https://www.youtube.com/watch?v=FLESHMJ-bI0
@@ -50,7 +50,7 @@ function Canvas() {
 
   const makeConnection = () => {
     if(isShared){
-      socket = io("http://localhost:3001");
+      socket = io(socketUrl);
 
       socket.on("receiveStroke", (data) => {
         onStrokeReceived(data);

@@ -1,4 +1,4 @@
 module.exports = {
-    baseUrl: "http://localhost:3001",
-
+    //frontendUrl: "http://localhost:3001",
+    frontendUrl: "https://envisionit-app.herokuapp.com/"
 }
