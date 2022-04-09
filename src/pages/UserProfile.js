@@ -33,43 +33,42 @@ const UserProfile = () => {
   } = useForm();
 
   useEffect(async () => {
-    await axios
-      .get(authUrl + "/currentUser", { withCredentials: true })
-      .then((res) => {
-        if (res.data !== "") {
-          setStatus({ isLoggedIn: true, user: res.data });
-          axios
-            .post(
-              "http://localhost:3001/graphql",
-              {
-                query: `query {
-          getUser(username: "${res.data}"
-          ) {
-            email
-            phone
-            city
+    const currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    if (currentUser !== ""){
+      setStatus({ isLoggedIn: true, user: currentUser})
+      axios
+        .post(
+          "http://localhost:3001/graphql",
+          {
+            query: `query {
+      getUser(username: "${currentUser}"
+      ) {
+        email
+        phone
+        city
+      }
+    }`,
+          },
+          { withCredentials: true },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        }`,
-              },
-              { withCredentials: true },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-            .then((res) => {
-              setinfo({
-                email: res.data.data.getUser.email,
-                phone: res.data.data.getUser.phone,
-                city: res.data.data.getUser.city,
-              });
-            });
-        } else {
-          setStatus({ isLoggedIn: false, user: null });
-        }
-      })
-      .catch();
+        )
+        .then((res) => {
+          setinfo({
+            email: res.data.data.getUser.email,
+            phone: res.data.data.getUser.phone,
+            city: res.data.data.getUser.city,
+          });
+        });
+    } else {
+      setStatus({ isLoggedIn: false, user: null})
+    }
+      
+    
+        
   }, []);
 
   useEffect(() => {
@@ -77,12 +76,14 @@ const UserProfile = () => {
   }, [changed]);
 
   const Savechanges = async (data) => {
+    const currentUser = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
     await axios
       .post(
         "http://localhost:3001/graphql",
         {
           query: `mutation {
           updateUser(input: {
+            username: "${currentUser}"
             email: "${data.email}"
             firstName: "909"
             lastName: "909"
