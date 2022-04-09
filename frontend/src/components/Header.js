@@ -17,9 +17,7 @@ const Header = () => {
   useEffect(() => {
     const user = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1")
     if (user !== "") {
-      //console.log("here");
       setStatus({ isLoggedIn: true, user: user });
-      //console.log(status);
     } else {
       setStatus({ isLoggedIn: false, user: null });
     }

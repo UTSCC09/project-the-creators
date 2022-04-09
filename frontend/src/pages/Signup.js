@@ -11,8 +11,8 @@ const SignupPage = () => {
     username: "",
     email: "",
     password: "",
-    fname: "",
-    lname: "",
+    firstName: "",
+    lastName: "",
     city: "",
     phone: "",
   }); */
@@ -33,20 +33,21 @@ const SignupPage = () => {
   } = useForm();
 
   const SignUp = async (data) => {
+    console.log(data)
     await axios
       .post(authUrl + "/signup", {
         username: data.username,
         email: data.email,
         password: data.password,
-        fname: data.fname,
-        lname: data.lname,
+        firstName: data.fname,
+        lastName: data.lname,
         city: data.city,
-        phone_number: data.phone,
+        phone: data.phone,
       })
       .then(() => {
         setHasError({ missInfo: false });
         setSucc(true);
-        window.location = "/signin";
+        window.location = "/galleries";
       })
       .catch((err) => {
         if (err.response.status === 400) {

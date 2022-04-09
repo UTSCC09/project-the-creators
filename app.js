@@ -49,7 +49,6 @@ app.use(function (req, res, next){
     let cookies = cookie.parse(req.headers.cookie || '');
     req.username = (cookies.username) ? cookies.username : '';
     context.user = req.username;
-    console.log("HTTP request", req.username, req.method, req.url, req.body);
     next();
 });
 
@@ -100,7 +99,6 @@ app.post('/auth/signup/', function (req, res, next) {
             const userDoc = new User(req.body);
             dbConnect.collection('users').insertOne(userDoc, function (err, result) {
                 if (err) return res.status(500).end(err);
-                console.log(`Added a new user with id ${result.insertedId}`);
                 // initialize cookie
                 res.setHeader('Set-Cookie', cookie.serialize('username', username, {
                         path : '/', 
@@ -125,7 +123,6 @@ app.post('/auth/signin/', function (req, res, next) {
     const password = req.body.password;
     // retrieve user from the database
     dbConnect.collection('users').findOne({username: username}, function (err, user) {
-        console.log(user)
         if (err) return res.status(500).end(err);
         if (!user) return res.status(401).end("The username or password is incorrect.");
         bcrypt.compare(password, user.password, function(err, result) {
@@ -143,14 +140,12 @@ app.post('/auth/signin/', function (req, res, next) {
 });
 
 app.get('/auth/signout/', function (req, res, next) {
-    console.log("destoyed session")
     res.setHeader('Set-Cookie', cookie.serialize('username', '', {
           path : '/', 
           maxAge: 60 * 60 * 24 * 7 // 1 week in number of seconds
     }));
     // delete session
     req.session.destroy(function(err) {
-        console.log("destoyed session")
         if (err) return res.status(500).end(err);
         res.json(null);
     });
@@ -167,7 +162,6 @@ app.post('/api/canvas', isAuthenticated, function (req, res, next) {
         const canvasDoc = new Canvas(req);
         dbConnect.collection('canvases').insertOne(canvasDoc, function (err, result) {
             if (err) return res.status(500).end(err);
-            console.log(`Added a new canvas with id ${result.insertedId}`);
             return res.json(result);
         });
     });
@@ -298,16 +292,11 @@ dbo.connectToServer(function (err) {
     io.on('connection', async (socket) => {
 
         socket.on('join-room', (data) => {
-            // console.log("its here");
-            // console.log(data);
             socket.join(data.id);
         });
 
         socket.on('sendStroke', (data) => {
-            // console.log(data.canvasStroke);
             socket.in(data.id).emit('receiveStroke', data.canvasStroke);
-            // console.log("\n\n\n\n\n\n");
-            // socket.to(data.id).emit('receiveStroke', data);
         });
     });
 });

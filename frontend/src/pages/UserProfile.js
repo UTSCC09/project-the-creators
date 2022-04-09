@@ -224,7 +224,7 @@ const UserProfile = () => {
                 Save changes!
               </Button>
 
-              <Button variant="primary" href="/markotto">
+              <Button variant="primary" href="/">
                 Cancel
               </Button>
             </Container>

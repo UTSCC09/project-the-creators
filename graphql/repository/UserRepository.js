@@ -29,7 +29,6 @@ module.exports = class UserRepository {
         try {
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('users').findOne({username: username});
-            // console.log(result)
             if (!result) {
                 const userDoc = new User(username, password, email, firstName, lastName, city, phone);
                 result = await dbConnect.collection('users').insertOne(userDoc);
@@ -49,14 +48,10 @@ module.exports = class UserRepository {
                 throw new Error("Cannot update another user's profile")
             const dbConnect = dbo.getDb();
             let result = await dbConnect.collection('users').findOne({username: username});
-            
-            console.log(result._id.toString())
-
             if (result) {
                 const updated = new User(result.username, result.password, email || result.email, firstName || result.firstName, lastName || result.lastName, city || result.city, phone || result.phone);
                 const updateDoc = { $set: updated };
                 result = await dbConnect.collection('users').updateOne({username: username}, updateDoc);
-                // console.log(result)
                 return updated;
             } else {
                 throw new Error("User could not be found")
