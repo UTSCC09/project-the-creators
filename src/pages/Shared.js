@@ -1,12 +1,7 @@
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import canvas from "../components/Canvas";
-import { apiUrl, authUrl } from "../lib/constants.js";
-import React, { useState, useEffect } from "react";
+import { authUrl } from "../lib/constants.js";
+import React, { useEffect } from "react";
 import axios from "axios";
+import "../styles/Gallery.css";
 import { useHistory } from "react-router-dom";
 
 let currentUser = "";
@@ -35,7 +30,6 @@ const Shared = () => {
       });
 
     var canvases = data.data.data.getAllCanvases;
-    console.log(canvases);
 
     let innerElmnt = ``;
 
@@ -66,7 +60,7 @@ const Shared = () => {
     if(inputVal){
       var ret = await axios.post('http://localhost:3001/graphql', {
       query: `mutation {
-        createCanvas(input: {username: "${currentUser}" title: "${inputVal}", isShared: true}) {
+        createCanvas(input: {creator: "${currentUser}", title: "${inputVal}", isShared: true}) {
           _id
         }
       }`
@@ -79,9 +73,8 @@ const Shared = () => {
       if(ret){
         history.push("/canvas", { identifier: ret.data.data.createCanvas._id});
       }
-    } else {
     }
-  }
+  };
 
   const history = useHistory();
  

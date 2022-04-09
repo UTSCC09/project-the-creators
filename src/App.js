@@ -7,7 +7,7 @@ import Galleries from "./pages/Galleries";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Userprofile from "./pages/UserProfile";
-import canvas from "./components/Canvas";
+import canvas from "./pages/Canvas";
 
 function App() {
   return (

@@ -7,7 +7,7 @@ import {
   Alert,
   Card,
 } from "react-bootstrap";
-import "./UserProfile.css";
+import "../styles/UserProfile.css";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -75,8 +75,6 @@ const UserProfile = () => {
   useEffect(() => {
     changed && (window.location = "/userprofile");
   }, [changed]);
-
-  console.log(status);
 
   const Savechanges = async (data) => {
     await axios

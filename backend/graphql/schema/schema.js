@@ -8,7 +8,7 @@ module.exports = buildSchema(`
     getCanvasById(_id: ID!): Canvas
     getCanvases(creator: String!, isShared: Boolean!): [Canvas]
     getAllCanvases(isShared: Boolean!): [Canvas]
-    getCollaboratorLink(creator: String!, title: String!): String
+    getCollaboratorLink(_id: ID!, creator: String!): String
   }
 
   type Mutation {
@@ -59,7 +59,7 @@ module.exports = buildSchema(`
   }
 
   input NewCanvasInput {
-    username: String!
+    creator: String!
     title: String!
     isShared: Boolean!
   }

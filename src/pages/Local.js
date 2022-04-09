@@ -1,13 +1,8 @@
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import { CardGroup, Container } from "react-bootstrap";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
-import { apiUrl, authUrl } from "../lib/constants.js";
+import { authUrl } from "../lib/constants.js";
 import '../styles/Gallery.css';
-import { get } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import zIndex from "@mui/material/styles/zIndex";
 
 let currentUser = "";
 
@@ -52,7 +47,6 @@ const Local = () => {
     var index = 0;
     document.querySelectorAll('.local-user-gallery-card').forEach(item => {
       var id = canvases[index]._id;
-      console.log(id);
       item.addEventListener('click', event => {
         history.push("/canvas", { identifier: id });
       });
@@ -67,7 +61,7 @@ const Local = () => {
     if(inputVal){
       var ret = await axios.post('http://localhost:3001/graphql', {
       query: `mutation {
-        createCanvas(input: {title: "${inputVal}", isShared: false}) {
+        createCanvas(input: {creator: "${currentUser}", title: "${inputVal}", isShared: false}) {
           _id
         }
       }`
@@ -81,10 +75,8 @@ const Local = () => {
       if(ret){
         history.push("/canvas", { identifier: ret.data.data.createCanvas._id});
       }
-    } else {
-      // console.log("test");
     }
-  }
+  };
 
   const history = useHistory();
 
