@@ -1,5 +1,5 @@
 import Header from "../components/Header";
-import "./HomePage.css";
+import "../styles/HomePage.css";
 import logo from "../media/beautiful-natural-environment-digital-painting.jpg";
 
 const HomePage = () => {

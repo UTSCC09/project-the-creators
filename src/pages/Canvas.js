@@ -3,8 +3,8 @@ import io from "socket.io-client";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "../styles/Canvas.css"
-import ColorPicker from "./ColorPicker";
-import StrokeSizeSelector from "./StrokeSizeSelector";
+import ColorPicker from "../components/ColorPicker";
+import StrokeSizeSelector from "../components/StrokeSizeSelector";
 import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from "history";
 

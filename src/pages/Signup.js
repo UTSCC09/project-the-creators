@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import { Form, Button, Row, Col, Alert } from "react-bootstrap";
-import "./Signup.css";
+import "../styles/Signup.css";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { authUrl, apiUrl } from "../lib/constants.js"

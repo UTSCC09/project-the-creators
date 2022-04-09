@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import canvas from "../components/Canvas";
+import canvas from "../pages/Canvas";
 import { apiUrl, authUrl } from "../lib/constants.js";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
