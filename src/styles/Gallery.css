@@ -1,3 +1,30 @@
+#canvas-url {
+  width: 500px;
+  height: 40px;
+  margin-top: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 0px 4px;
+  border: none;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+#canvas-url-submit {
+    position: relative;
+    width: 100px;
+    height: 40px;
+    /* margin-top: 5px; */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 0px 4px;
+    border: none;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transition: 0.2s;
+}
+
+#canvas-url-submit:hover{
+    cursor: pointer;
+    background: rgb(162, 187, 255);
+}
+
 .user-gallery {
     width: 1500px;
     display: flex;

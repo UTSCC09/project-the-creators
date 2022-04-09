@@ -24,7 +24,7 @@ module.exports = {
       return context.repository.user.updateUser(args.input.username, args.input.email, args.input.firstName, args.input.lastName, args.input.city, args.input.phone, context.user);
     },
     createCanvas: function(args, context) {
-      return context.repository.canvas.createCanvas(args.input.username, args.input.title, args.input.isShared, context.user);
+      return context.repository.canvas.createCanvas(args.input.creator, args.input.title, args.input.isShared, context.user);
     },
     updateCanvas: function(args, context) {
       return context.repository.canvas.updateCanvas(args.input.username, args.input.title, args.input.thumbnailPath, args.input.isShared, args.input.collaborators, context.user);
@@ -33,6 +33,6 @@ module.exports = {
       return context.repository.canvas.updateCanvasById(args.input._id, args.input.thumbnailPath);
     },
     getCollaboratorLink: function(args, context) {
-      return context.repository.canvas.getCollaboratorLink(args.creator, args.title, context.user);
+      return context.repository.canvas.getCollaboratorLink(args._id, args.creator, context.user);
     },
 };

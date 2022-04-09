@@ -44,6 +44,7 @@ function Canvas() {
   const [hue, setHue] = useState(0);
   const [isShared, setisShared] = useState(true);
   const [canvasId, setCanvasId] = useState("");
+  const [canvasCreator, setCanvasCreator] = useState("");
   
 
   const makeConnection = () => {
@@ -67,9 +68,15 @@ function Canvas() {
           isShared
         }
       }`
+    },{ withCredentials: true },
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     setisShared(data.data.data.getCanvasById.isShared);
+    setCanvasCreator(data.data.data.getCanvasById.creator);
     setCanvasId(location.state.identifier);
 
     var canvasImage = data.data.data.getCanvasById.thumbnailPath;
@@ -103,7 +110,7 @@ function Canvas() {
     changeStrokeType(DEFAULT);
 
     makeConnection();
-  });
+  },[]);
 
   const onStrokeReceived = (payloadData) => {
     drawing(
@@ -295,9 +302,28 @@ function Canvas() {
     history.push("/galleries");
   }
 
+  const getInviteLink = async () => {
+    document.getElementById("invite-link-button").style.background = "#00FF00";
+    document.getElementById("invite-link-button").innerHTML = "Link Copied!";
+    var data = await axios.post('http://localhost:3001/graphql', {
+      query: `{
+        getCollaboratorLink(_id: "${canvasId}", creator: "${canvasCreator}")
+      }`
+    },{ withCredentials: true },
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    navigator.clipboard.writeText(data.data.data.getCollaboratorLink);
+  }
+
   return (
     <div>
       <div id="exit-button" onClick={exitCanvas}/>
+      <div id="invite-link-button" onClick={getInviteLink}>
+        Get Link
+      </div>
       <div id="toolbar-container">
         <ColorPicker
           setStrokeColour={setStrokeColour}

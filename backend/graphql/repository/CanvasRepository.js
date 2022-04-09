@@ -99,12 +99,14 @@ module.exports = class CanvasRepository {
         }
     }
      
-    async getCollaboratorLink(creator, title, currentUser) {
+    async getCollaboratorLink(id, creator, currentUser) {
         try {
             const dbConnect = dbo.getDb();
+            var _idObj = ObjectId(id);
+            console.log(currentUser);
             if (currentUser != creator)
                 throw new Error("Can only get canvases of your own gallery");
-            let result = await dbConnect.collection('canvases').findOne({creator: creator, title: title});
+            let result = await dbConnect.collection('canvases').findOne({_id: _idObj, creator: creator});
             console.log(result)
             if (result) {
                 // Gemerate the link that will add the collabortor to the canvas

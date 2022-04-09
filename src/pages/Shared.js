@@ -1,6 +1,7 @@
 import { authUrl } from "../lib/constants.js";
 import React, { useEffect } from "react";
 import axios from "axios";
+import "../styles/Gallery.css";
 import { useHistory } from "react-router-dom";
 
 let currentUser = "";
@@ -65,7 +66,7 @@ const Shared = () => {
     if(inputVal){
       var ret = await axios.post('http://localhost:3001/graphql', {
       query: `mutation {
-        createCanvas(input: {title: "${inputVal}", isShared: true}) {
+        createCanvas(input: {creator: "${currentUser}", title: "${inputVal}", isShared: true}) {
           _id
         }
       }`
@@ -97,7 +98,7 @@ const Shared = () => {
 
   useEffect(() => {
     setupGallery();
-  });
+  }, []);
 
   return (
     <div id='user-shared-gallery' className='user-gallery'>

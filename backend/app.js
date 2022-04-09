@@ -221,9 +221,7 @@ app.put('/canvas/:id', isAuthenticated, function (req, res, next) {
     dbConnect.collection('canvases').findOne({_id: canvasId}, function (err, canvas) {
         if (err) return res.status(500).end(err);
         // Update the collaborators field
-        console.log(canvas)
         let collaborators = canvas.collaborators;
-        console.log(collaborators)
         collaborators.push(req.username);
         const updateDoc = { $set: {
             "collaborators": collaborators
@@ -231,7 +229,8 @@ app.put('/canvas/:id', isAuthenticated, function (req, res, next) {
         dbConnect.collection('canvases').updateOne({_id: canvasId}, updateDoc, function (err, updateStatus) {
             if (err) return res.status(500).end(err);
             // TODO: send redirect to canvas
-            res.json(updateStatus);
+            res.json(canvasId);
+            // res.send({canvasId});
         });
     });
 })
@@ -278,6 +277,7 @@ const io = require('socket.io')(httpServer, {
 });
 const { fstat } = require('fs');
 const { isatty } = require('tty');
+const { Console } = require('console');
 const PORT = 3001;
 
 
@@ -296,13 +296,13 @@ dbo.connectToServer(function (err) {
     io.on('connection', async (socket) => {
 
         socket.on('join-room', (data) => {
-            console.log("its here");
-            console.log(data);
+            // console.log("its here");
+            // console.log(data);
             socket.join(data.id);
         });
 
         socket.on('sendStroke', (data) => {
-            console.log(data.canvasStroke);
+            // console.log(data.canvasStroke);
             socket.in(data.id).emit('receiveStroke', data.canvasStroke);
             // console.log("\n\n\n\n\n\n");
             // socket.to(data.id).emit('receiveStroke', data);
