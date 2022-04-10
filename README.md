@@ -70,10 +70,10 @@ Jadin Luong:
 - Implemented functionality for the shared and local galleries (connected galleries to backend)
 
 Johnson Zhong:
-- Backend express api calls
-- Backend graphql queries and framework
-- Managing MongoDB
-- Deployment onto Heroku, managing
+- Implemented backend express api calls
+- Implemented backend graphql queries and framework
+- Managed MongoDB database and structure
+- Deployment onto Heroku, managing host and https
 
 Mengqi Zhao:
 - Implemented the functionality of the user. (connected user-related functionalities to backend)
