@@ -1,18 +1,12 @@
 # EnvisionIt
 
 ## Project URL
-
-**Task:** Provide the link to your deployed application. Please make sure the link works. 
 https://envisionit-app.herokuapp.com/
 
 ## Project Video URL 
-
-**Task:** Provide the link to your youtube video. Please make sure the link works. 
 https://www.youtube.com/watch?v=N_cfEx--Ksw
 
 ## Project Description
-
-**Task:** Provide a detailed description of your app
 Application Name:
 Our app is called EnvisionIt.
 
@@ -47,35 +41,29 @@ Javascript
 
 Framework:
 ReactJs
+Express
 
 Libraries:
 Socket.io (Websocket Library)
+GraphQL
+bcrypt
 
 Third-Party API:
 MongoDB
 
 ## Deployment
-
-**Task:** Explain how you have deployed your application. 
 We used Heroku to host our application. 
 
 ## Maintenance
-
-**Task:** Explain how you monitor your deployed app to make sure that everything is working as expected.
 To monitor our app, we use the logging services on Heroku to check for any errors that occurred. We can also check our MongoDB Atlas cloud account to check
 that all the data in clean and log wrongful uses of the database.
 
 ## Challenges
-
-**Task:** What is the top 3 most challenging things that you have learned/developed for you app? Please restrict your answer to only three items. 
-
 1. Connecting users through websockets into specific rooms
 2. Learning the GraphQL query language
 3. Deploying onto Heroku
 
 ## Contributions
-
-**Task:** Describe the contribution of each team member to the project. Please provide the full name of each team member (but no student number).
 Jadin Luong:
 - Implemented the overall functionality of the canvas
 - Implemented websockets to allow users to connect to a collaborative canvas and perform real-time operations
