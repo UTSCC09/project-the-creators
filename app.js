@@ -22,9 +22,8 @@ const { frontendUrl } = require('constants');
 var corsOptions = {
     credentials: true,
     origin: frontendUrl,
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+    optionsSuccessStatus: 200
 }
-
 
 const app = express();
 app.use(cors(corsOptions));
@@ -67,25 +66,6 @@ let User = function (req) {
     this.creationDate = new Date();
 }
 
-let Canvas = function (req) {
-    const date = new Date();
-    this.title = req.body.title; 
-    this.creator = req.username;
-    //this.path = req.file.path;
-    this.isShared = req.body.isShared;
-    this.collaborators = [req.username];
-    this.date = date.toUTCString();
-};
-
-const isAuthenticated = function(req, res, next) {
-    if (!req.username) return res.status(401).end("access denied");
-    next();
-};
-
-const isSameUser = function(req, res, next) {
-    if (req.username !== req.params.username) return res.status(401).end("access denied");
-    next();
-}
 app.post('/auth/signup/', function (req, res, next) {
     const dbConnect = dbo.getDb();
     const username = req.body.username;
@@ -151,114 +131,12 @@ app.get('/auth/signout/', function (req, res, next) {
     });
 });
 
-
-/// Create
-app.post('/api/canvas', isAuthenticated, function (req, res, next) {
-    const dbConnect = dbo.getDb();
-    const canvasTitle = req.body.title;
-    dbConnect.collection('canvases').findOne({username: req.username, title: canvasTitle}, function (err, canvas) {
-        if (err) return res.status(500).end(err);
-        if (canvas) return res.status(409).end("canvas with title " + canvasTitle + " already exists");
-        const canvasDoc = new Canvas(req);
-        dbConnect.collection('canvases').insertOne(canvasDoc, function (err, result) {
-            if (err) return res.status(500).end(err);
-            return res.json(result);
-        });
-    });
-});
-
-/// Read
-app.get('/api/users', isAuthenticated, function(req, res, next) {
-    const dbConnect = dbo.getDb();
-    dbConnect.collection('users').find({}).toArray(function (err, users) {
-        if (err) return res.status(500).end(err);
-        res.json(users);
-    });
-});
-
-app.get('/api/users/:username', isAuthenticated, isSameUser, function(req, res, next) {
-    const dbConnect = dbo.getDb();
-    dbConnect.collection('users').findOne({username: req.params.username}, function (err, user) {
-        if (err) return res.status(500).end(err);
-        res.json(user);
-    });
-});
-
-app.get('/api/canvas/:id/:title', isAuthenticated, function (req, res, next) {
-    const dbConnect = dbo.getDb();
-    dbConnect.collection('canvases').findOne({creator: req.params.id, title: req.params.title}, function (err, canvas) {
-        if (err) return res.status(500).end(err);
-        res.json(canvas);
-    });
-});
-
-// get shared/private galleries
-app.get('/api/gallery/:id/:isShared', isAuthenticated, function (req, res, next) {
-    const dbConnect = dbo.getDb();
-    // Prevent non-creators from seeing other's private galleries
-    const reqUser = req.params.id;
-    const isShared = req.params.isShared;
-    if (!(isShared) && req.username != reqUser)
-        return res.status(401).end("cannot view user " + reqUser + "'s private gallery");
-    dbConnect.collection('canvases').find({creator: reqUser, isShared: JSON.parse(isShared.toLowerCase()), collaborators: req.username}).toArray(function (err, canvases) {
-        if (err) return res.status(500).end(err);
-        res.json(canvases);
-    });
-});
-
-// Collaboration
-app.put('/canvas/:id', isAuthenticated, function (req, res, next) {
-    const dbConnect = dbo.getDb();
-    const canvasId =  ObjectId(req.params.id);
-    // Add the signed in username to the canvas
-    dbConnect.collection('canvases').findOne({_id: canvasId}, function (err, canvas) {
-        if (err) return res.status(500).end(err);
-        // Update the collaborators field
-        let collaborators = canvas.collaborators;
-        collaborators.push(req.username);
-        const updateDoc = { $set: {
-            "collaborators": collaborators
-        } };
-        dbConnect.collection('canvases').updateOne({_id: canvasId}, updateDoc, function (err, updateStatus) {
-            if (err) return res.status(500).end(err);
-            // TODO: send redirect to canvas
-            res.json(canvasId);
-            // res.send({canvasId});
-        });
-    });
-})
-
 app.use('/graphql', graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
     context: context,
 }));
-
-
-/// Update
-app.put('/api/users/:username', isAuthenticated, isSameUser, function (req, res, next) {
-//app.put('/api/users/:username', isAuthenticated, function (req, res, next) {
-    // Update the data for the user
-    const dbConnect = dbo.getDb();
-    // Get the user
-    dbConnect.collection('users').findOne({username: req.params.username}, function (err, user) {
-
-        const updateDoc = { $set: {
-            "email": req.body.email || user.email, 
-            "firstName" : req.body.firstName || user.firstName, 
-            "lastName" : req.body.lastName || user.lastName, 
-            "city" : req.body.city || user.city, 
-            "phone": req.body.phone || user.phone, 
-        } };
-        dbConnect.collection('users').updateOne({username: req.params.username}, updateDoc, function (err, updateStatus) {
-            if (err) return res.status(500).end(err);
-            res.json(updateStatus);
-        });
-    });
-})
-
-/// Delete
 
 app.get('*', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'frontend/build/index.html'));
