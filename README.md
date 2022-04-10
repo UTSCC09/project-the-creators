@@ -10,8 +10,8 @@ https://www.youtube.com/watch?v=N_cfEx--Ksw
 Application Name:
 Our app is called EnvisionIt.
 
-User profile:
-This application allows users to signup, signin and sign out.
+User system:
+Users can signup, signin, signout and edit user profile in the application.
 
 Galleries
 Once users are signed into the application they are able to go into their own personal gallery which consists of two 
@@ -74,6 +74,11 @@ Johnson Zhong:
 - Backend graphql queries and framework
 - Managing MongoDB
 - Deployment onto Heroku, managing
+
+Mengqi Zhao:
+- Implemented the functionality of the user. (connected user-related functionalities to backend)
+- Implemented the overall design of the frontend.
+- Implemented the routing/navigation logic of the frontend.
 
 # One more thing? 
 
