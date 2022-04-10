@@ -7,13 +7,14 @@ https://envisionit-app.herokuapp.com/
 https://www.youtube.com/watch?v=N_cfEx--Ksw
 
 ## Project Description
-Application Name:
-Our app is called EnvisionIt.
+Application Name: Our app is called EnvisionIt.
 
 User system:
+
 Users can signup, signin, signout and edit user profile in the application.
 
 Galleries
+
 Once users are signed into the application they are able to go into their own personal gallery which consists of two 
 different gallery sections, the "Local" gallery and the "Shared" gallery. The 
 Local gallery consists of only the canvases that the user themselves can see, these canvases can not be shared with other users.
@@ -23,6 +24,7 @@ but the creators of the canvases in the shared gallery can actually obtain a lin
 Their peers can then submit the link and will be redirected to the canvas, the canvas will then be added to the peer's shared gallery.
 
 Canvas
+
 The canvas is very straight forward, this allows the user to draw on a blank canvas with several tools to choose from on the left side of the 
 canvas. The link mentioned in the Galleries section above can be found within the canvas page. This page also contains an exit button which 
 allows the user to exit out of the canvas page and back into their galleries. The unique feature about the canvas is that, if the canvas is 
@@ -33,20 +35,22 @@ they left off. This works for both shared and local canvases.
 
 ## Development
 
-**Task:** Leaving deployment aside, explain how the app is built. Please describe the overall code design and be specific about the programming languages, framework, libraries and third-party api that you have used.
+Overall, we used very standard promgramming languages and tools for example we used HTML, CSS, Javascript and mostly implemented our frontend using ReactJS framework. We also used plenty of NodeJs/ReactJS libraries to frontend, design and routing purposes. We used several backend libraries to allow for collaboration such as Socket.io and GraphQL.
+
 Programming Languages:
-HTML
-CSS
+HTML,
+CSS,
 Javascript
 
 Framework:
-ReactJs
+ReactJs,
 Express
 
 Libraries:
-Socket.io (Websocket Library)
-GraphQL
-bcrypt
+Socket.io (Websocket Library),
+GraphQL,
+bcrypt,
+cookie
 
 Third-Party API:
 MongoDB
@@ -79,7 +83,3 @@ Mengqi Zhao:
 - Implemented the functionality of the user. (connected user-related functionalities to backend)
 - Implemented the overall design of the frontend.
 - Implemented the routing/navigation logic of the frontend.
-
-# One more thing? 
-
-**Task:** Any additional comment you want to share with the course staff? 
