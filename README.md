@@ -1,45 +1,91 @@
-# Envisionit
+```# EnvisionIt
 
-### Team Members
-| Name | Student Number | Student E-mail |
-| ------ | ------ | ------ |
-| Jadin Luong | 1001689238 | jadin.luong@mail.utoronto.ca |
-| Mengqi Zhao | 1005355269 | hart.zhao@mail.utoronto.ca |
-| Johnson Zhong | 1004051107 | johnson.zhong@mail.utoronto.ca |
+## Project URL
 
-### A description of the web application
-This application allows users to create their own projects in their own gallery which will be non-collaborative. If a user wants to create a collaborative project, then they must create it in their shared gallery where they can invite users with an invitation link or give specific users access permissions to collaborate on a single canvas and each user will be able to simultaneously modify one single canvas. This will act as a tool to support several activities such as creating collaborative art, brainstorming with teammates, teaching, etc. The web application will include a chat system on the side to allow users to communicate with one another through text so they are not only restricted to collaborating on a canvas. This application will also offer users a variety of utensils to draw with.
+**Task:** Provide the link to your deployed application. Please make sure the link works. 
+https://envisionit-app.herokuapp.com/
 
-### A description of the key features that will be completed by the Beta version
-**Feature 1**: User profiles - Non-authenticated users can sign up to the app, authenticated users can sign in/out the app. Authenticated users can view their profile.
+## Project Video URL 
 
-**Feature 2**: Canvas - This will be the main part of the application, users will be able to draw on the same canvas simultaneously (if the owner allows for collaboration). Users will be able to change the colour of their strokes.
+**Task:** Provide the link to your youtube video. Please make sure the link works. 
 
-**Feature 3**: Users’ galleries and shared galleries - there will be two galleries for each user. One is the user's own gallery where users can browse their own non-shared projects and the second is the shared gallery where users can browse projects shared to them.
+## Project Description
 
-**Feature 4**: Collaboration - Users will be able to work on the same shared project simultaneously.
+**Task:** Provide a detailed description of your app
+Application Name:
+Our app is called EnvisionIt.
 
-### A description of the additional features that will be complete by the Final version
-**Feature 1**: Chat system - This will allow users to communicate with one another through text.
+User profile:
+This application allows users to signup, signin and sign out.
 
-**Feature 2**: Utensil Selection - Users will be able to choose any utensil of their liking. Example: Can change strokes to paint brush strokes or pencil strokes.
+Galleries
+Once users are signed into the application they are able to go into their own personal gallery which consists of two 
+different gallery sections, the "Local" gallery and the "Shared" gallery. The 
+Local gallery consists of only the canvases that the user themselves can see, these canvases can not be shared with other users.
+This can be considered as a "private" canvas/project. 
+The Shared gallery consists of only the canvases that can be shared with users. At first, only the users created it can see the canvas 
+but the creators of the canvases in the shared gallery can actually obtain a link inside the canvas itself and send it to their peers.
+Their peers can then submit the link and will be redirected to the canvas, the canvas will then be added to the peer's shared gallery.
 
-**Feature 3**: Gallery Restricted Access - Users will be able to restrict access to some of their projects in their shared gallery. Users will be able to allow specific authenticated users to access their galleries. This can be done through a invitation link to the project or by manually authenticating a specific user to access the project.
+Canvas
+The canvas is very straight forward, this allows the user to draw on a blank canvas with several tools to choose from on the left side of the 
+canvas. The link mentioned in the Galleries section above can be found within the canvas page. This page also contains an exit button which 
+allows the user to exit out of the canvas page and back into their galleries. The unique feature about the canvas is that, if the canvas is 
+"shared" then users can connect with one another and collaborate on the canvas real-time. In other words, as long as users are connected into 
+the same "shared" canvas they can see eachother's brush strokes and other actions. The canvases have an auto-save mechanism where everytime a user 
+creates a new brush stroke onto the canvas, the current state of the canvas will be saved so users can always come back to the canvas and start where 
+they left off. This works for both shared and local canvases.
 
-### A description of the technology stack that you will use to build and deploy it
+## Development
 
-**Frontend**: React.js Bootstrap two.js
+**Task:** Leaving deployment aside, explain how the app is built. Please describe the overall code design and be specific about the programming languages, framework, libraries and third-party api that you have used.
+Programming Languages:
+HTML
+CSS
+Javascript
 
-**Backend**: express.js, asp.net or spring boot
+Framework:
+ReactJs
 
-**Database**: GraphQL
+Libraries:
+Socket.io (Websocket Library)
 
-**Package Manager**: npm - Node Package Manager
+Third-Party API:
+MongoDB
 
-### A description of the top 5 technical challenges
-1. The ability to make the application collaborative, connecting users into one collaborative project. Sockets may be used. (Potential library socket.io)
-2. Implementing different paint strokes, brush, pencil, spray paint, etc.
-3. We never used GraphQL before, so there will be technical challenges to get familiarized and mastered with this database.
-4. Even though our team used React.js before, it has been a while since we last touched it. Therefore, we will need to conquer any potential frontend technical difficulties.
-5. Properly connecting users and allowing them to send messages in real-time.
+## Deployment
 
+**Task:** Explain how you have deployed your application. 
+We used Heroku to host our application. 
+
+## Maintenance
+
+**Task:** Explain how you monitor your deployed app to make sure that everything is working as expected.
+To monitor our app, we use the logging services on Heroku to check for any errors that occurred. We can also check our MongoDB Atlas cloud account to check
+that all the data in clean and log wrongful uses of the database.
+
+## Challenges
+
+**Task:** What is the top 3 most challenging things that you have learned/developed for you app? Please restrict your answer to only three items. 
+
+1. Connecting users through websockets into specific rooms
+2. Learning the GraphQL query language
+3. Deploying onto Heroku
+
+## Contributions
+
+**Task:** Describe the contribution of each team member to the project. Please provide the full name of each team member (but no student number).
+Jadin Luong:
+- Implemented the overall functionality of the canvas
+- Implemented websockets to allow users to connect to a collaborative canvas and perform real-time operations
+- Implemented functionality for the shared and local galleries (connected galleries to backend)
+
+Johnson Zhong:
+- Backend express api calls
+- Backend graphql queries and framework
+- Managing MongoDB
+- Deployment onto Heroku, managing
+
+# One more thing? 
+
+**Task:** Any additional comment you want to share with the course staff? 
